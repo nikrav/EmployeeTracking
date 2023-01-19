@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
-const mysql = require('mysql')
+const mysql = require('mysql2')
 require('dotenv').config()
 
-const pool = mysql.createConnection({
+const pool = mysql.createPool({
     connectionLimit: 10,
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
