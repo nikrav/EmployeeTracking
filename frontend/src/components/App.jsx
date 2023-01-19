@@ -1,8 +1,10 @@
 import React from "react";
+import GetData from "./GetData";
+
 
 function App(){
     return(
-        <h1>Hello World</h1>
+        <GetData />
     )
 }
 

@@ -3,12 +3,22 @@
 //setup npm modules for use
 const express = require('express');
 const bodyParser = require('body-parser');
-const { urlencoded } = require('body-parser');
+const cors = require('cors');
 
 //set up express app
 const app = express();
-app.use(urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(cors());
 
-app.listen(3000, function(){
-    console.log("Server is running on port 3000");
+app.get("/", (req, res) =>{
+    res.json({
+        name: "Bill",
+        age: 45
+    })
+    console.log("Request Made");
+})
+
+app.listen(5000, function(){
+    console.log("Server is running on port 5000");
 })
