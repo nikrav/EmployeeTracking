@@ -1,10 +1,10 @@
 import React from "react";
-import GetData from "./GetData";
+import Employees from "./Employees";
 
 
 function App(){
     return(
-        <GetData />
+        <Employees />
     )
 }
 
