@@ -13,7 +13,7 @@ function GetData(){
         //changes the data state to the data
         .then(data => setData(data))
     }, [])
-    // [] at the end determines when to make the request, [] by itself only makes the request once
+    // [] at the end determines when to make the request, [ ] by itself only makes the request once
 
     //returns our data in html
     return(
