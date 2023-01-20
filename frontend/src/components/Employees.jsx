@@ -58,6 +58,6 @@ function Employees() {
             </form>
         </div>
     );
-}
+};
 
 export default Employees;
