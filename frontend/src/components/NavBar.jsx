@@ -18,6 +18,9 @@ function NavBar() {
                     <li className="nav-item px-3">
                         <Link to="/employees" className="nav-link">Employees</Link>
                     </li>
+                    <li className="nav-item px-3">
+                        <Link to="/journals" className="nav-link">Journals</Link>
+                    </li>
                 </ul>
             </div>
         </nav>

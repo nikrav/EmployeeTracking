@@ -2,8 +2,8 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Employees from "./Employees";
 import Layout from "./Layout";
-import Login from "./Login";
 import Home from "./Home";
+import Journals from "./Journals";
 
 function App(){
     return(
@@ -12,6 +12,7 @@ function App(){
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Home/>}/>
                     <Route path="employees" element={<Employees />}/>
+                    <Route path="journals" element={<Journals />}/>
                 </Route>
             </Routes>
         </BrowserRouter>
