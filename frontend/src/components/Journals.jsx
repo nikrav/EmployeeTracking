@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react";
+import SearchEmployees from "./SearchEmployees";
 
 function Journals() {
     //our states to get the journal data
     const [journals, setJournals] = useState([]);
+    //our states to enter new journal data
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [newJournalDate, setNewJournalDate] = useState("");
+    const [receiverID, setReceiverID] = useState("");
+    const [giverID, setGiverID] = useState("");
 
     //the information we are getting from the backend
     useEffect(() => {
@@ -26,7 +33,7 @@ function Journals() {
 
                 return (
 
-                    <div>
+                    <div key={journal.journal_id}>
                         <h1>{journal.fName + " " + journal.lName}</h1>
                         <h5>{journalDate + "      " + journal.good_bad_neutral}</h5>
                         <p>{journal.content}</p>
@@ -34,6 +41,7 @@ function Journals() {
                     </div>
                 )
             })}
+            <SearchEmployees />
         </div>
     );
 };
