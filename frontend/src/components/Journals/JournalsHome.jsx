@@ -30,7 +30,7 @@ function Journals() {
 
                     <div key={journal.journal_id}>
                         <h1>Journal ID {journal.journal_id} {journal.fName + " " + journal.lName}</h1>
-                        <h5>{journalDate + "      " + journal.good_bad_neutral}</h5>
+                        <h5>{journalDate + "      " + journal.good_bad_info}</h5>
                         <p>{journal.content}</p>
                         <p>{journal.g_fName + " " + journal.g_lName}</p>
                     </div>

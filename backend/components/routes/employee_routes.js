@@ -8,13 +8,81 @@ const pool = require('./db.js');
 router.route("/")
     //get all employees or a singular employee
     .get(async (req, res) => {
+
         //find all employees if fName does not exist
         if (req.query.fName == null) {
+
+            //get the order by field
+            const orderBy = req.query.orderBy;
+
+            //qry we want to run
+            var qry;
             console.log("Requesting All Employees");
+
+            //get the qry we want to run based on order the user wants
+            switch (orderBy) {
+                //order by name with the number of journals also present
+                case "Name":
+                    qry = (
+                        `SELECT employees.employee_id, employees.fName, employees.lName, count(journals.good_bad_info) as numOfJournals
+                        FROM employees
+                        LEFT JOIN journals
+                        ON receiving_id=employee_id
+                        GROUP BY employee_id
+                        ORDER BY fName;`
+                    );
+                    break;
+                //order by number of bad journals
+                case "Good":
+                    qry = (
+                        `SELECT employees.employee_id, employees.fName, employees.lName, count(journals.good_bad_info) as numOfJournals
+                        FROM employees 
+                        LEFT JOIN journals 
+                        ON receiving_id=employee_id AND journals.good_bad_info='good' 
+                        GROUP BY employee_id 
+                        ORDER BY numOfJournals DESC, fName;`
+                    );
+                    break;
+                //order by number of info journals
+                case "Info":
+                    qry = (
+                        `SELECT employees.employee_id, employees.fName, employees.lName, count(journals.good_bad_info) as numOfJournals
+                        FROM employees 
+                        LEFT JOIN journals 
+                        ON receiving_id=employee_id AND journals.good_bad_info='info' 
+                        GROUP BY employee_id 
+                        ORDER BY numOfJournals DESC, fName;`
+                    );
+                    break;
+                case "Bad":
+                    qry = (
+                        `SELECT employees.employee_id, employees.fName, employees.lName, count(journals.good_bad_info) as numOfJournals
+                        FROM employees 
+                        LEFT JOIN journals 
+                        ON receiving_id=employee_id AND journals.good_bad_info='bad' 
+                        GROUP BY employee_id 
+                        ORDER BY numOfJournals DESC, fName;`
+                    );
+                    break;
+                case "Total":
+                    qry = (
+                        `SELECT employees.employee_id, employees.fName, employees.lName, count(journals.good_bad_info) as numOfJournals
+                        FROM employees
+                        LEFT JOIN journals
+                        ON receiving_id=employee_id
+                        GROUP BY employee_id
+                        ORDER BY numOfJournals DESC, fName;`
+                    );
+                    break
+                default:
+                    console.log("ERROR THIS SHOULD NOT HAPPEN");
+                    return;
+            }
+
             pool.getConnection((err, conn) => {
                 if (err) throw err; //not connected
                 //query the database
-                conn.query('SELECT * FROM employees', function (error, result, fields) {
+                conn.query(qry, function (error, result, fields) {
                     //send the result in a json
                     conn.release();
                     if (error) throw error;
@@ -86,5 +154,5 @@ router.route("/")
         })
     })
 
-    //exports our routes
+//exports our routes
 module.exports = router;

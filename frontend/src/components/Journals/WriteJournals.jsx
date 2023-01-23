@@ -18,26 +18,17 @@ function WriteJournals() {
         evt.preventDefault();
         //if it is the first time we are only getting the name
         if (firstTime === 1) {
-            //object we are going to send/post
-            const employee = {
-                fName: firstName,
-                lName: lastName
-            }
+            //url with parameters
+            const url = process.env.REACT_APP_PROXY + "/employees?fName=" + firstName + "&lName=" + lastName;
             setEmployeeFullName(firstName + " " + lastName);
-            fetch(process.env.REACT_APP_PROXY + "/employees-search", {
-                //type of method we are doing
-                method: "POST",
-                //type of information we are sending
-                headers: { "Content-Type": "application/json" },
-                //data we are sending
-                body: JSON.stringify(employee)
-            }).then(res => res.json())
+            fetch(url)
+                .then(res => res.json())
                 //sets the employees id
                 .then(employeeData => setEmployeeID(employeeData[0].employee_id))
                 //catches errors
                 .catch(err => console.log(err));
-                //0 represents false, move the state of the page along
-                setFirstTime(0);
+            //0 represents false, move the state of the page along
+            setFirstTime(0);
 
         } else {
             //object we are going to send/post
@@ -51,7 +42,7 @@ function WriteJournals() {
             }
 
             console.log(journal);
-            fetch(process.env.REACT_APP_PROXY + "/journals-add", {
+            fetch(process.env.REACT_APP_PROXY + "/journals", {
                 //type of method we are doing
                 method: "POST",
                 //type of information we are sending
@@ -66,7 +57,7 @@ function WriteJournals() {
 
     }
 
-    function deleteJournal(){
+    function deleteJournal() {
         //stops page from refreshing after submit
         // evt.preventDefault();
         //object we are going to send/post
@@ -75,14 +66,14 @@ function WriteJournals() {
         }
 
         //sends the post request
-        fetch(process.env.REACT_APP_PROXY + "/journals-delete", {
+        fetch(process.env.REACT_APP_PROXY + "/journals", {
             //type of method we are doing
             method: "DELETE",
             //type of information we are sending
-            headers: {  "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json" },
             //data we are sending
             body: JSON.stringify(employee)
-        }).then(()=>{
+        }).then(() => {
             console.log("Journal Removed");
         })
     }
@@ -90,19 +81,19 @@ function WriteJournals() {
     if (employeeID === "") {
         return (
             <div>
-            <form onSubmit={handleSubmit}>
-                <label>Enter First Name</label>
-                <input type="text" name="fName" required onChange={(change) => setFirstName(change.target.value)} />
-                <label>Enter Last Name</label>
-                <input type="text" name="lName" required onChange={(change) => setLastName(change.target.value)} />
-                <button type="submit">Search Employees</button>
-            </form>
-            <h1>DELETE JOURNAL</h1>
-            <form onSubmit={deleteJournal}>
-                <label>Enter Journal Number</label>
-                <input type="text" name="fName" required onChange={(change) => setJournalID(change.target.value)} />
-                <button type="submit">DELETE JOURNAL</button>
-            </form>
+                <form onSubmit={handleSubmit}>
+                    <label>Enter First Name</label>
+                    <input type="text" name="fName" required onChange={(change) => setFirstName(change.target.value)} />
+                    <label>Enter Last Name</label>
+                    <input type="text" name="lName" required onChange={(change) => setLastName(change.target.value)} />
+                    <button type="submit">Search Employees</button>
+                </form>
+                <h1>DELETE JOURNAL</h1>
+                <form onSubmit={deleteJournal}>
+                    <label>Enter Journal Number</label>
+                    <input type="text" name="fName" required onChange={(change) => setJournalID(change.target.value)} />
+                    <button type="submit">DELETE JOURNAL</button>
+                </form>
             </div>);
     } else {
 
@@ -112,7 +103,7 @@ function WriteJournals() {
                 <form onSubmit={handleSubmit}>
                     <label>Enter Date</label>
                     <input type="date" required onChange={(change) => setNewJournalDate(change.target.value)} />
-                    <label>Enter Type (good, bad neutral)</label>
+                    <label>Enter Type (good, bad, info)</label>
                     <input type="text" required onChange={(change) => setJournalType(change.target.value)} />
                     <label>Enter The Information</label>
                     <input type="text" name="fName" required onChange={(change) => setInfo(change.target.value)} />

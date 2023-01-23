@@ -12,13 +12,14 @@ router.route("/")
             if (err) throw err; //not connected
             //query the database
             const qry = (
-                "select journals.journal_id, employees.fName, employees.lName, journals.j_date, journals.good_bad_neutral, journals.content, giver.fName as g_fName, giver.lName as g_lName " +
-                "from employees " +
-                "join journals " +
-                "on employees.employee_id = journals.receiving_id " +
-                "join employees as giver " +
-                "on giver.employee_id = journals.giving_id " +
-                "ORDER BY j_date DESC;");
+                `select journals.journal_id, employees.fName, employees.lName, journals.j_date, journals.good_bad_info, journals.content, giver.fName as g_fName, giver.lName as g_lName 
+                from employees 
+                join journals 
+                on employees.employee_id = journals.receiving_id 
+                join employees as giver 
+                on giver.employee_id = journals.giving_id 
+                ORDER BY j_date DESC;`
+            );
             conn.query(qry, function (error, result, fields) {
                 //send the result in a json
                 conn.release();
@@ -48,7 +49,7 @@ router.route("/")
                 //giving employees ID
                 const givingID = result[0].employee_id;
                 //insertion query
-                const newQry = "INSERT INTO employee_tracker.journals (good_bad_neutral, j_date, receiving_id, giving_id, content) VALUES (?, ?, ?, ?, ?);"
+                const newQry = "INSERT INTO employee_tracker.journals (good_bad_info, j_date, receiving_id, giving_id, content) VALUES (?, ?, ?, ?, ?);"
 
                 //run the second query to insert
                 conn.query(newQry, [journalType, journalDate, receivingID, givingID, content], function (errorTWO, resultTWO, fieldsTWO) {
