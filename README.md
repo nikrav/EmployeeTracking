@@ -6,8 +6,19 @@
 - Frontend using React
 - Backend using Express and MySQL
 
-###### Version 4
+##### Ideas
+- Add Policies into Journals or as a New Page
 
+### Versions
+
+###### Version 4
+- Reformat
+  - Journal Page
+    - Visuals
+    - Show All/Good/Info/Bad Journals Only
+  - Employee Page
+    - Visuals
+    - Make pop out
 
 ###### Version 3
 - Refactor Frontend and Backend
