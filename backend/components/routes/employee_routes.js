@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const pool = require('./db.js');
+const pool = require("./db.js");
 
 //for the employees route that allows us to access the employee table in the db
 //it is / because the app adds the "/employees" already
@@ -14,75 +14,54 @@ router.route("/")
 
             //get the order by field
             const orderBy = req.query.orderBy;
+            console.log(orderBy);
+            //string we will add to the end of the query to determine what it will be ordered by
+            let qryEnd;
 
-            //qry we want to run
-            var qry;
-            console.log("Requesting All Employees");
-
-            //get the qry we want to run based on order the user wants
-            switch (orderBy) {
-                //order by name with the number of journals also present
-                case "Name":
-                    qry = (
-                        `SELECT employees.employee_id, employees.fName, employees.lName, count(journals.good_bad_info) as numOfJournals
-                        FROM employees
-                        LEFT JOIN journals
-                        ON receiving_id=employee_id
-                        GROUP BY employee_id
-                        ORDER BY fName;`
-                    );
-                    break;
-                //order by number of bad journals
+            switch(orderBy){
                 case "Good":
-                    qry = (
-                        `SELECT employees.employee_id, employees.fName, employees.lName, count(journals.good_bad_info) as numOfJournals
-                        FROM employees 
-                        LEFT JOIN journals 
-                        ON receiving_id=employee_id AND journals.good_bad_info='good' 
-                        GROUP BY employee_id 
-                        ORDER BY numOfJournals DESC, fName;`
-                    );
-                    break;
-                //order by number of info journals
-                case "Info":
-                    qry = (
-                        `SELECT employees.employee_id, employees.fName, employees.lName, count(journals.good_bad_info) as numOfJournals
-                        FROM employees 
-                        LEFT JOIN journals 
-                        ON receiving_id=employee_id AND journals.good_bad_info='info' 
-                        GROUP BY employee_id 
-                        ORDER BY numOfJournals DESC, fName;`
-                    );
+                    qryEnd = "numOfGood DESC, lName, fName";
                     break;
                 case "Bad":
-                    qry = (
-                        `SELECT employees.employee_id, employees.fName, employees.lName, count(journals.good_bad_info) as numOfJournals
-                        FROM employees 
-                        LEFT JOIN journals 
-                        ON receiving_id=employee_id AND journals.good_bad_info='bad' 
-                        GROUP BY employee_id 
-                        ORDER BY numOfJournals DESC, fName;`
-                    );
+                    qryEnd = "numOfBad DESC, lName, fName";
+                    break;
+                case "Info":
+                    qryEnd = "numOfInfo DESC, lName, fName";
+                    break;
+                case "First Name":
+                    qryEnd = "fName, lName";
+                    break;
+                case "Last Name":
+                    qryEnd = "lName, fName";
                     break;
                 case "Total":
-                    qry = (
-                        `SELECT employees.employee_id, employees.fName, employees.lName, count(journals.good_bad_info) as numOfJournals
-                        FROM employees
-                        LEFT JOIN journals
-                        ON receiving_id=employee_id
-                        GROUP BY employee_id
-                        ORDER BY numOfJournals DESC, fName;`
-                    );
-                    break
+                    qryEnd = "numOfTotal DESC, lName, fName";
+                    break;
                 default:
-                    console.log("ERROR THIS SHOULD NOT HAPPEN");
-                    return;
+                    console.log("THIS SHOULD NOT HAPPEN");
+                    break;
             }
+
+            //qry we want to run
+            const qry = 
+            `SELECT employees.employee_id, employees.fName, employees.lName,  (count(goodJournals.good_bad_info) + count(badJournals.good_bad_info) + count(infoJournals.good_bad_info)) as numOfTotal ,count(goodJournals.good_bad_info) as numOfGood, count(infoJournals.good_bad_info) as numOfInfo, count(badJournals.good_bad_info) as numOfBad
+            FROM employees
+            LEFT JOIN journals as infoJournals
+            ON infoJournals.receiving_id=employee_id AND infoJournals.good_bad_info="info"
+            LEFT JOIN journals as goodJournals
+            ON goodJournals.receiving_id=employee_id AND goodJournals.good_bad_info="good"
+            LEFT JOIN journals as badJournals
+            ON badJournals.receiving_id=employee_id AND badJournals.good_bad_info="bad"
+            GROUP BY employee_id, infoJournals.good_bad_info, goodJournals.good_bad_info, badJournals.good_bad_info
+            ORDER BY `
+            console.log("Requesting All Employees");
+
 
             pool.getConnection((err, conn) => {
                 if (err) throw err; //not connected
                 //query the database
-                conn.query(qry, function (error, result, fields) {
+                //if you use qrt, [endQry] it does not work because it adds ''
+                conn.query(qry + qryEnd + ";", function (error, result, fields) {
                     //send the result in a json
                     conn.release();
                     if (error) throw error;
@@ -120,7 +99,7 @@ router.route("/")
             if (err) throw err;
 
             //set up the string, the ? ? represent variables that we will imput later
-            const insertQry = 'INSERT INTO employees (fName, lName) VALUES (?, ?);';
+            const insertQry = "INSERT INTO employees (fName, lName) VALUES (?, ?);";
             //run the insert command
             conn.query(insertQry, [fName, lName], (error, result) => {
                 conn.release();

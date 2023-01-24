@@ -16,6 +16,7 @@ function OneEmployeesJournals(props){
             //catches errors
             .catch(err => console.log(err));
     }, [props.id]);
+    //if prop id changes it will refresh
 
     return(
         <PrintJournals journalsToPrint={employeeData}/>
