@@ -7,26 +7,56 @@ const pool = require('./db.js');
 //it is / because the app in server.js adds the "/journals" already
 router.route("/")
     .get(async (req, res) => {
-        console.log("Requesting Journals");
-        pool.getConnection((err, conn) => {
-            if (err) throw err; //not connected
-            //query the database
-            const qry = (
-                `select journals.journal_id, employees.fName, employees.lName, journals.j_date, journals.good_bad_info, journals.content, giver.fName as g_fName, giver.lName as g_lName 
-                from employees 
-                join journals 
-                on employees.employee_id = journals.receiving_id 
-                join employees as giver 
-                on giver.employee_id = journals.giving_id 
-                ORDER BY j_date DESC;`
-            );
-            conn.query(qry, function (error, result, fields) {
-                //send the result in a json
-                conn.release();
-                if (error) throw error;
-                res.json(result);
+
+        //if the employee id is not present give back all data
+        if (req.query.employee_id == null) {
+            console.log("Requesting Journals");
+            pool.getConnection((err, conn) => {
+                if (err) throw err; //not connected
+                //query the database
+                const qry = (
+                    `select journals.journal_id, employees.fName, employees.lName, journals.j_date, journals.good_bad_info, journals.content, giver.fName as g_fName, giver.lName as g_lName 
+                    from employees 
+                    join journals 
+                    on employees.employee_id = journals.receiving_id 
+                    join employees as giver 
+                    on giver.employee_id = journals.giving_id 
+                    ORDER BY j_date DESC;`
+                );
+                conn.query(qry, function (error, result, fields) {
+                    //send the result in a json
+                    conn.release();
+                    if (error) throw error;
+                    res.json(result);
+                });
             })
-        })
+
+        } 
+        //if the id is present then we will give back on their journals
+        else{
+            const employee_id = req.query.employee_id;
+            console.log("Requesting Journals");
+            pool.getConnection((err, conn) => {
+                if (err) throw err; //not connected
+                //query the database
+                const qry = (
+                    `select journals.journal_id, employees.fName, employees.lName, journals.j_date, journals.good_bad_info, journals.content, giver.fName as g_fName, giver.lName as g_lName 
+                    from employees 
+                    join journals 
+                    on employees.employee_id = journals.receiving_id 
+                    join employees as giver 
+                    on giver.employee_id = journals.giving_id 
+                    where journals.receiving_id = ?
+                    ORDER BY j_date DESC;`
+                );
+                conn.query(qry, [employee_id], function (error, result, fields) {
+                    //send the result in a json
+                    conn.release();
+                    if (error) throw error;
+                    res.json(result);
+                });
+            })
+        }
     })
 
     .post(async (req, res) => {
@@ -57,11 +87,6 @@ router.route("/")
                     if (errorTWO) throw errorTWO;
                 })
             })
-        })
-
-        pool.getConnection((err, conn) => {
-            if (err) throw err;
-
         })
     })
 

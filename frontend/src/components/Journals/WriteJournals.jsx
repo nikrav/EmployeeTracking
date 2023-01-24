@@ -8,7 +8,7 @@ function WriteJournals() {
     const [employeeID, setEmployeeID] = useState("");
     const [newJournalDate, setNewJournalDate] = useState("");
     const [journalType, setJournalType] = useState("");
-    const [firstTime, setFirstTime] = useState(1);
+    const [firstTime, setFirstTime] = useState(true);
     const [info, setInfo] = useState("");
     const [journalID, setJournalID] = useState("");
 
@@ -17,18 +17,27 @@ function WriteJournals() {
         //stops page from refreshing after submit
         evt.preventDefault();
         //if it is the first time we are only getting the name
-        if (firstTime === 1) {
+        if (firstTime) {
             //url with parameters
             const url = process.env.REACT_APP_PROXY + "/employees?fName=" + firstName + "&lName=" + lastName;
             setEmployeeFullName(firstName + " " + lastName);
             fetch(url)
                 .then(res => res.json())
                 //sets the employees id
-                .then(employeeData => setEmployeeID(employeeData[0].employee_id))
+                .then(employeeData => {
+                    if (employeeData[0] === undefined) {
+                        //PUT ERROR MESSAGE HERE
+                        console.log("Error, user does not exist")
+                    } else {
+                        //if it is a value, then set it to employee id and continue the page state
+                        setFirstTime(false);
+                        setEmployeeID(employeeData[0].employee_id)
+                    }
+                    
+
+                })
                 //catches errors
                 .catch(err => console.log(err));
-            //0 represents false, move the state of the page along
-            setFirstTime(0);
 
         } else {
             //object we are going to send/post
