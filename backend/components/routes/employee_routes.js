@@ -104,6 +104,7 @@ router.route("/")
             conn.query(insertQry, [fName, lName], (error, result) => {
                 conn.release();
                 if (error) throw error;
+                res.json(result);
                 console.log("Employee Added");
             })
         })
@@ -128,6 +129,7 @@ router.route("/")
             conn.query(qry, [fName, lName], (error, result) => {
                 conn.release();
                 if (error) throw error;
+                res.json(result);
                 console.log("Employee Added");
             })
         })

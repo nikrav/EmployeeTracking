@@ -85,6 +85,7 @@ router.route("/")
                 conn.query(newQry, [journalType, journalDate, receivingID, givingID, content], function (errorTWO, resultTWO, fieldsTWO) {
                     conn.release();
                     if (errorTWO) throw errorTWO;
+                    res.json(resultTWO);
                 })
             })
         })
@@ -109,6 +110,7 @@ router.route("/")
                 conn.release();
                 if (error) throw error;
                 console.log("Journal Deleted");
+                res.json(result);
             })
         })
     })
