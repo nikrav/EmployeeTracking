@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-function DeleteEmployee() {
+function DeleteEmployee(props) {
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -24,6 +24,7 @@ function DeleteEmployee() {
             body: JSON.stringify(employee)
         }).then(() => {
             console.log("Employee Removed");
+            props.changeState(props.state ? false : true)
         })
     }
 

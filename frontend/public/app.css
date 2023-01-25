@@ -1,0 +1,21 @@
+.my-modal {
+    z-index: 2000;
+}
+
+.search-bar{
+    display: inline-block;
+}
+
+.search-bar input{
+    width: 200px;
+}
+
+.serach-bar ul {
+    width: 200px;
+    z-index: 1500;
+}
+
+.search-bar li {
+    width: 200px;
+    z-index: 1500;
+}

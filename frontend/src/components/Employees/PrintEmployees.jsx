@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import OneEmployeesJournals from "../Journals/OneEmployeesJournals";
+import AddEmployee from "./AddEmployee";
+import DeleteEmployee from "./DeleteEmployee";
 
 function PrintEmployees() {
     const [employees, setEmployees] = useState([]);
@@ -8,6 +10,7 @@ function PrintEmployees() {
     //turn employee overlay off at start, represented by 0
     const [employeeOverlay, setEmployeeOverlay] = useState(false);
     const [clickedEmployee, setClickedEmpoyee] = useState("")
+    const [stateTracker, setStateTracker] = useState(false)
 
     //the information we are getting from the backend
     useEffect(() => {
@@ -19,7 +22,8 @@ function PrintEmployees() {
             .then(employeesData => setEmployees(employeesData))
             //catches errors
             .catch(err => console.log(err));
-    }, [orderBy]);
+        //if we change the order by or if we change the length of the eemployees
+    }, [orderBy, stateTracker]);
     // [] at the end determines when to make the request, [ ] by itself only makes the request once
 
     //returns our data in html
@@ -67,7 +71,8 @@ function PrintEmployees() {
                     ))}
                 </tbody>
             </table>
-
+            <AddEmployee state={stateTracker} changeState={setStateTracker}/>
+            <DeleteEmployee state={stateTracker} changeState={setStateTracker}/>
         </div>
     );
 

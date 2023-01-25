@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-function AddEmployee() {
+function AddEmployee(props) {
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -8,7 +8,7 @@ function AddEmployee() {
     //handles the submit request by sending a post request
     function handleSubmit(evt) {
         //stops page from refreshing after submit
-        // evt.preventDefault();
+        evt.preventDefault();
         //object we are going to send/post
         const employee = {
             fName: firstName,
@@ -25,6 +25,7 @@ function AddEmployee() {
             body: JSON.stringify(employee)
         }).then(() => {
             console.log("New Employee Added");
+            props.changeState(props.state ? false : true)
         })
     }
 

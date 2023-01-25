@@ -38,7 +38,7 @@ router.route("/")
                     qryEnd = "numOfTotal DESC, lName, fName";
                     break;
                 default:
-                    console.log("THIS SHOULD NOT HAPPEN");
+                    qryEnd = "lName, fName";
                     break;
             }
 
@@ -69,15 +69,31 @@ router.route("/")
                 })
             })
         }
-        //if fName does exist find the employee with fName and lName
-        else {
+        //if fName does exist and lName does not
+        else if (req.query.lName == null){
+            console.log("Searching Employees");
+            const fName = req.query.fName;
+            pool.getConnection((err, conn) => {
+                if (err) throw err; //not connected
+                //query the database for employees whose last name or first name is like the one entered
+                const qry = "SELECT employee_id, employees.fName, employees.lName FROM employees WHERE employees.fName LIKE '%" + fName + "%' OR employees.lName LIKE '%" + fName + "%' ORDER BY lName, fName;"
+                conn.query(qry, function (error, result, fields) {
+                    //send the result in a json
+                    conn.release();
+                    if (error) throw error;
+                    res.json(result);
+                })
+            })
+        } 
+        //if there is both a fName and a lName
+        else{
             console.log("Searching Employees");
             const fName = req.query.fName;
             const lName = req.query.lName;
             pool.getConnection((err, conn) => {
                 if (err) throw err; //not connected
-                //query the database
-                const qry = "SELECT employee_id FROM employees WHERE employees.fName=? AND employees.lName=?;"
+                //query the database for employees whose last name or first name is like the one entered
+                const qry = "SELECT employee_id, employees.fName, employees.lName FROM employees WHERE employees.fName LIKE '%" + fName + "%' AND employees.lName LIKE '%" + lName + "%' ORDER BY lName, fName;"
                 conn.query(qry, [fName, lName], function (error, result, fields) {
                     //send the result in a json
                     conn.release();
@@ -86,6 +102,7 @@ router.route("/")
                 })
             })
         }
+        
     })
     //add a new employee
     .post((req, res) => {

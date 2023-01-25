@@ -1,13 +1,14 @@
+import SearchEmployees from "../CustomComponents/SearchEmployees";
 import PrintEmployees from "./PrintEmployees";
-import AddEmployee from "./AddEmployee";
-import DeleteEmployee from "./DeleteEmployee";
+import { useState } from 'react';
 
 function Employees() {
-    return(
+    let [showInfo, setShowInfo] = useState(false);
+
+    return (
         <div>
+            <SearchEmployees setShow={setShowInfo} show={showInfo} onClickOutside={() => {setShowInfo(false)}}/>
             <PrintEmployees />
-            <AddEmployee />
-            <DeleteEmployee />
         </div>
     )
 };

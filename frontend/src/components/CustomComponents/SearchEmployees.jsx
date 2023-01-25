@@ -1,0 +1,81 @@
+// must be called like this
+// let [showInfo, setShowInfo] = useState(false);
+// <SearchEmployees setShow={setShowInfo} show={showInfo} onClickOutside={() => {setShowInfo(false)}}/>
+
+
+import React, { useState, useEffect, useRef } from "react";
+
+function SearchEmployees(props) {
+
+    const ref = useRef(null);
+    const { onClickOutside } = props;
+
+    const [inputName, setInputName] = useState("");
+    //url we will use to get the information in fetch
+    const [url, setUrl] = useState("/employees")
+    const [listOfNames, setListOfNames] = useState([]);
+
+    useEffect(() => {
+        const checkIfClickedOutside = e => {
+            // If the menu is open and the clicked target is not within the menu,
+            // then close the menu
+            if (ref.current && !ref.current.contains(e.target)) {
+                onClickOutside && onClickOutside();
+            }
+        }
+
+        document.addEventListener("click", checkIfClickedOutside, true)
+
+        return () => {
+            // Cleanup the event listener
+            document.removeEventListener("click", checkIfClickedOutside, true)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [onClickOutside]);
+
+    useEffect(() => {
+        //if the inputName is not empty then we will set the nameArray up
+        if (inputName !== "") {
+            const nameArray = inputName.split(" ");
+            //if the user has only input the first name then only set up firstName
+            if (nameArray.length === 1) {
+                const firstName = nameArray[0];
+                setUrl("/employees?fName=" + firstName);
+            } else if (nameArray.length === 2) {
+                const firstName = nameArray[0];
+                const lastName = nameArray[1];
+                setUrl("/employees?fName=" + firstName + "&lName=" + lastName);
+            }
+        }
+        else {
+            setUrl("/employees")
+        }
+        fetch(process.env.REACT_APP_PROXY + url)
+            .then(res => res.json())
+            //sets the employees id
+            .then(employeeData => {
+                setListOfNames(employeeData);
+            })
+            //catches errors
+            .catch(err => console.log(err));
+    }, [inputName, url])
+
+    const handleChange = (e) => {
+        setInputName(e.target.value);
+    };
+
+    return (
+        <div ref={ref} className="search-bar">
+            <form>
+                <input type="search" value={inputName} onChange={handleChange} onClick={()=>{props.setShow(true)}}/>
+            </form>
+            <ul className="position-absolute list-group">
+                {props.show && listOfNames.map(name => {
+                    return <li className="border-2 list-group-item list-group-item-primary list-group-item-action" key={name.employee_id}>{name.fName} {name.lName}</li>
+                })}
+            </ul>
+        </div>
+    );
+}
+
+export default SearchEmployees;
