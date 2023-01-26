@@ -3,7 +3,6 @@ import DeleteJournal from "./DeleteJournal"
 const _ = require("lodash");
 
 function PrintJournals(props) {
-    const [deleteJournalState, setDeleteJournalState] = useState(false);
     const [journalToDelete, setJournalToDelete] = useState(0);
     //css for card color, it can change
     // eslint-disable-next-line no-unused-vars
@@ -13,7 +12,9 @@ function PrintJournals(props) {
         <div>
             {
                 //if journal is being selected to delete siplay this, also pass the parents function into the props
-                deleteJournalState && <DeleteJournal journal_id={journalToDelete} setDeleteState={setDeleteJournalState} changeState={props.changeState} state={props.state}/>
+                <div className="modal fade" id="deleteModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <DeleteJournal changeState={props.changeState} state={props.state} journal_id={journalToDelete}/>
+                </div>
             }
             {props.journalsToPrint.map((journal) => {
                 //changes the format of the date
@@ -30,7 +31,7 @@ function PrintJournals(props) {
                                 _.lowerCase(journal.good_bad_info) === "good" ? cardColor = "card-header text-bg-success"
                                     : _.lowerCase(journal.good_bad_info) === "bad" ? cardColor = "card-header text-bg-danger"
                                         : cardColor = "card-header text-bg-white"}>
-                                <h5 className="ms-0 mb-0 d-inline-block">{_.upperFirst(journal.good_bad_info)}</h5> <button type="button" className="d-inline-block position-absolute end-0 me-4 mb-0 btn-close" aria-label="Close" onClick={() => { setDeleteJournalState(true); setJournalToDelete(journal.journal_id) }}></button>
+                                <h5 className="ms-0 mb-0 d-inline-block">{_.upperFirst(journal.good_bad_info)}</h5> <button data-bs-toggle="modal" data-bs-target="#deleteModal" type="button" className="d-inline-block position-absolute end-0 me-4 mb-0 btn-close" aria-label="Close" onClick={() => setJournalToDelete(journal.journal_id) }></button>
                             </div>
                             <div className="card-body">
                                 <h2 className="text-center">{journal.fName + " " + journal.lName}</h2>

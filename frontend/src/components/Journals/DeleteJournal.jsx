@@ -26,13 +26,15 @@ function DeleteJournal(props) {
     }
 
     return (
-        <div className="position-fixed top-50 start-50 translate-middle my-modal">
-            <div className="card">
-                <div className="card-header"><h3>Are You Sure You Want to Delete This Journal?</h3></div>
-                <div className="card-body">
+        <div className="modal-dialog">
+            <div className="modal-content">
+                <div className="modal-header">
+                <h3 className="modal-title center-text">Delete This Journal?</h3>
+                </div>
+                <div className="modal-body">
                     {/* if we click no, then we will set the parent state back to the original no deletion state */}
-                    <button type="button" className="btn btn-success" onClick={() => props.setDeleteState(false)}>No, Go Back</button>
-                    <button type="button" className="btn btn-danger" onClick={() => { deleteJournal(); props.setDeleteState(false); }}>Yes, Delete It</button>
+                    <button type="button" className="mx-5 btn btn-success" data-bs-dismiss="modal">No, Go Back</button>
+                    <button type="button" className="mx-5 btn btn-danger" data-bs-dismiss="modal" onClick={() => deleteJournal()}>Yes, Delete It</button>
                 </div>
             </div>
         </div>

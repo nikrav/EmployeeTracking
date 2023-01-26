@@ -19,3 +19,7 @@
     width: 200px;
     z-index: 1500;
 }
+
+.center-text{
+    text-align: center;
+}
