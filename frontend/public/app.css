@@ -1,5 +1,6 @@
-.my-modal {
-    z-index: 2000;
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 .search-bar{
@@ -12,14 +13,12 @@
 
 .serach-bar ul {
     width: 200px;
-    z-index: 1500;
 }
 
 .search-bar li {
     width: 200px;
-    z-index: 1500;
 }
 
-.center-text{
-    text-align: center;
+.text-box{
+    width: 100%;
 }

@@ -1,5 +1,5 @@
-// must be called like this
-// let [showInfo, setShowInfo] = useState(false);
+// must be called like this outside in parent
+// const [showInfo, setShowInfo] = useState(false);
 // <SearchEmployees setShow={setShowInfo} show={showInfo} onClickOutside={() => {setShowInfo(false)}}/>
 
 
@@ -64,14 +64,24 @@ function SearchEmployees(props) {
         setInputName(e.target.value);
     };
 
+    function handleClick(employee) {
+        //return the employee id
+        props.setID(employee.employee_id);
+        //set the input name to the clicked employee
+        setInputName(employee.fName + " " + employee.lName);
+        //toggle off the list of names
+        onClickOutside && onClickOutside();
+    }
+
     return (
-        <div ref={ref} className="search-bar">
+        <div ref={ref} className="search-bar" style={props.classItem}>
             <form>
-                <input type="search" value={inputName} onChange={handleChange} onClick={()=>{props.setShow(true)}}/>
+                <input className="mx-0 text-center" type="search" value={inputName} onChange={handleChange} onClick={() => { props.setShow(true) }} />
             </form>
-            <ul className="position-absolute list-group">
-                {props.show && listOfNames.map(name => {
-                    return <li className="border-2 list-group-item list-group-item-primary list-group-item-action" key={name.employee_id}>{name.fName} {name.lName}</li>
+            <ul className="list-group position-absolute">
+                {props.show && listOfNames.map(employee => {
+                    //this will return the list of employees and also set the employee id when clicked
+                    return <li className="border-2 list-group-item list-group-item-primary list-group-item-action text-center" onClick={() => handleClick(employee)} key={employee.employee_id}>{employee.fName} {employee.lName}</li>
                 })}
             </ul>
         </div>

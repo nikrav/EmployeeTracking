@@ -34,6 +34,7 @@ function Journals(props) {
     return (
         <div>
             <PrintJournals journalsToPrint={journals} changeState={setStateTracker} state={stateTracker}/>
+            <h3 className="text-center"><u>Add a New Journal</u></h3>
             <WriteJournals changeState={setStateTracker} state={stateTracker}/>
         </div>
     );

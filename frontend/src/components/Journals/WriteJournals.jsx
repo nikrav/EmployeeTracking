@@ -1,38 +1,17 @@
 import React, { useState } from "react";
+import SearchEmployees from "../CustomComponents/SearchEmployees";
 
 function WriteJournals(props) {
 
-    const [employeeFullName, setEmployeeFullName] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
+    // const [employeeFullName, setEmployeeFullName] = useState("");
     const [employeeID, setEmployeeID] = useState("");
     const [newJournalDate, setNewJournalDate] = useState("");
-    const [journalType, setJournalType] = useState("");
+    const [journalType, setJournalType] = useState("Type");
     const [info, setInfo] = useState("");
-
-    //handles the submit request by sending a post request
-    function handleSubmit(evt) {
-        //stops page from refreshing after submit
-        evt.preventDefault();
-        //url with parameters
-        const url = process.env.REACT_APP_PROXY + "/employees?fName=" + firstName + "&lName=" + lastName;
-        setEmployeeFullName(firstName + " " + lastName);
-        fetch(url)
-            .then(res => res.json())
-            //sets the employees id
-            .then(employeeData => {
-                if (employeeData[0] === undefined) {
-                    //PUT ERROR MESSAGE HERE
-                    console.log("Error, user does not exist")
-                } else {
-                    setEmployeeID(employeeData[0].employee_id)
-                }
-
-
-            })
-            //catches errors
-            .catch(err => console.log(err));
-    }
+    const [cardColor, setCardColor] = useState("");
+    const [showInfo, setShowInfo] = useState(false);
+    const [showInfoGiving, setShowInfoGiving] = useState(false);
+    const [employeeIDGiving, setEmployeeIDGiving] = useState("");
 
     function submitJournal(evt) {
 
@@ -44,13 +23,10 @@ function WriteJournals(props) {
             journalTypeInfo: journalType,
             journalDate: newJournalDate,
             content: info,
-            givingFirst: firstName,
-            givingLast: lastName
+            givingID: employeeIDGiving
         }
-        //mmakes the emplooyee id empty so that the search bar reappears
-        setEmployeeID("");
 
-        console.log(journal);
+        console.log(employeeID + " " + employeeIDGiving)
         fetch(process.env.REACT_APP_PROXY + "/journals", {
             //type of method we are doing
             method: "POST",
@@ -59,45 +35,39 @@ function WriteJournals(props) {
             //data we are sending
             body: JSON.stringify(journal)
             //if props state is true then we set it to false, and vice versa, this will reload the journals
-        }).then(() => { props.changeState(props.state ? false : true) })
+        }).then(() => { props.changeState(props.state ? false : true); })
             .catch(err => console.log(err));
 
     }
 
 
-    if (employeeID === "") {
-        return (
-            <div>
-                <form onSubmit={handleSubmit}>
-                    <label>Enter First Name</label>
-                    <input type="text" name="fName" required onChange={(change) => setFirstName(change.target.value)} />
-                    <label>Enter Last Name</label>
-                    <input type="text" name="lName" required onChange={(change) => setLastName(change.target.value)} />
-                    <button type="submit">Search Employees</button>
-                </form>
-            </div>
-        );
-    } else {
+    return (
 
-        return (
-            <div>
-                <h1>{employeeFullName + " ID: " + employeeID}</h1>
-                <form onSubmit={submitJournal}>
-                    <label>Enter Date</label>
-                    <input type="date" required onChange={(change) => setNewJournalDate(change.target.value)} />
-                    <label>Enter Type (good, bad, info)</label>
-                    <input type="text" required onChange={(change) => setJournalType(change.target.value)} />
-                    <label>Enter The Information</label>
-                    <input type="text" name="fName" required onChange={(change) => setInfo(change.target.value)} />
-                    <label>Enter Your First Name</label>
-                    <input type="text" name="fName" required onChange={(change) => setFirstName(change.target.value)} />
-                    <label>Enter Your Last Name</label>
-                    <input type="text" name="lName" required onChange={(change) => setLastName(change.target.value)} />
-                    <button type="submit">Add Journal</button>
-                </form>
+        <div className="row px-4 my-5 position-relative">
+            {/* centers the journals */}
+            <div className="col-md-4"/>
+            <div className="card col-12 col-md-4 my-2 p-0">
+                <div className={"card-header " + cardColor}>
+                    <button className="btn btn-secondary dropdown-toggle ms-0 mb-0 d-inline-block" type="button" data-bs-toggle="dropdown" aria-expanded="false">{journalType}</button>
+                    <button type="button" className="btn btn-secondary" style = {{position: "relative", float:"right"}} onClick={submitJournal}>Add Journal</button>
+                    <ul className="dropdown-menu">
+                        {/*When a button is clicked, it changes the orderBy state so that the order can be changed in the get request */}
+                        <li><button onClick={() => {setJournalType("Good"); setCardColor("text-bg-primary")}} className="dropdown-item">Good</button></li>
+                        <li><button onClick={() => {setJournalType("Info"); setCardColor("text-bg-white")}} className="dropdown-item">Info</button></li>
+                        <li><button onClick={() => {setJournalType("Bad"); setCardColor("text-bg-danger")}} className="dropdown-item">Bad</button></li>
+                    </ul>
+                </div>
+                <div className="card-body search-bar-dropdown">
+                    <SearchEmployees setID={setEmployeeID} setShow={setShowInfo} show={showInfo} onClickOutside={() => {setShowInfo(false)}}/>
+                    <textarea className="mt-3 mb-0 p-1 border border-3 text-box" onChange={(e)=>setInfo(e.target.value)}></textarea>
+                </div>
+                <div className="card-footer">
+                    <input type="date" className="d-inline-block mb-0 ms-0" onChange={(e)=>setNewJournalDate(e.target.value)}></input>
+                    <SearchEmployees classItem={{position: "relative", float:"right"}} setID={setEmployeeIDGiving} setShow={setShowInfoGiving} show={showInfoGiving} onClickOutside={() => {setShowInfoGiving(false)}}/>
+                </div>
             </div>
-        );
-    }
+        </div>
+    );
 
 }
 

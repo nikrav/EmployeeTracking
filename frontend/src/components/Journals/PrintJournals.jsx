@@ -28,7 +28,7 @@ function PrintJournals(props) {
                         <div className="card col-12 col-md-4 my-2 p-0">
                             <div className={
                                 //sepending on what the journal information is we will change the class name
-                                _.lowerCase(journal.good_bad_info) === "good" ? cardColor = "card-header text-bg-success"
+                                _.lowerCase(journal.good_bad_info) === "good" ? cardColor = "card-header text-bg-primary"
                                     : _.lowerCase(journal.good_bad_info) === "bad" ? cardColor = "card-header text-bg-danger"
                                         : cardColor = "card-header text-bg-white"}>
                                 <h5 className="ms-0 mb-0 d-inline-block">{_.upperFirst(journal.good_bad_info)}</h5> <button data-bs-toggle="modal" data-bs-target="#deleteModal" type="button" className="d-inline-block position-absolute end-0 me-4 mb-0 btn-close" aria-label="Close" onClick={() => setJournalToDelete(journal.journal_id) }></button>

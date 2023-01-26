@@ -31,9 +31,9 @@ router.route("/")
                 });
             })
 
-        } 
+        }
         //if the id is present then we will give back on their journals
-        else{
+        else {
             const employee_id = req.query.employee_id;
             console.log("Requesting Journals");
             pool.getConnection((err, conn) => {
@@ -62,31 +62,22 @@ router.route("/")
     .post(async (req, res) => {
         console.log("Adding Journal");
         //information sent to here
-        const fName = req.body.givingFirst;
-        const lName = req.body.givingLast;
+        const givingID = req.body.givingID;
         const receivingID = req.body.receivingID;
         const journalDate = req.body.journalDate;
         const journalType = req.body.journalTypeInfo;
         const content = req.body.content;
-        console.log(journalDate);
 
         pool.getConnection((err, conn) => {
             if (err) throw err; //not connected
-            //query the database for the giving persons id
-            const qry = "SELECT employee_id FROM employees WHERE employees.fName='" + fName + "' AND employees.lName='" + lName + "';"
-            conn.query(qry, function (error, result, fields) {
-                if (error) throw error;
-                //giving employees ID
-                const givingID = result[0].employee_id;
-                //insertion query
-                const newQry = "INSERT INTO employee_tracker.journals (good_bad_info, j_date, receiving_id, giving_id, content) VALUES (?, ?, ?, ?, ?);"
+            //insertion query
+            const newQry = "INSERT INTO employee_tracker.journals (good_bad_info, j_date, receiving_id, giving_id, content) VALUES (?, ?, ?, ?, ?);"
 
-                //run the second query to insert
-                conn.query(newQry, [journalType, journalDate, receivingID, givingID, content], function (errorTWO, resultTWO, fieldsTWO) {
-                    conn.release();
-                    if (errorTWO) throw errorTWO;
-                    res.json(resultTWO);
-                })
+            //run the second query to insert
+            conn.query(newQry, [journalType, journalDate, receivingID, givingID, content], function (error, result, fields) {
+                conn.release();
+                if (error) throw error;
+                res.json(result);
             })
         })
     })
