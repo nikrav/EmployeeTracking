@@ -24,7 +24,6 @@ function AddEmployee(props) {
             //data we are sending
             body: JSON.stringify(employee)
         }).then(() => {
-            console.log("New Employee Added");
             props.changeState(props.state ? false : true)
         })
     }

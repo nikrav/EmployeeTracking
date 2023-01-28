@@ -23,7 +23,6 @@ function DeleteEmployee(props) {
             //data we are sending
             body: JSON.stringify(employee)
         }).then(() => {
-            console.log("Employee Removed");
             props.changeState(props.state ? false : true)
         })
     }

@@ -1,13 +1,14 @@
-html, body {
+html,
+body {
     max-width: 100%;
     overflow-x: hidden;
 }
 
-.search-bar{
+.search-bar {
     display: inline-block;
 }
 
-.search-bar input{
+.search-bar input {
     width: 200px;
 }
 
@@ -19,6 +20,12 @@ html, body {
     width: 200px;
 }
 
-.text-box{
+.text-box {
     width: 100%;
+}
+
+.add-journal-btn {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
 }

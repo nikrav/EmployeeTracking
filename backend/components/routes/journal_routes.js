@@ -10,7 +10,6 @@ router.route("/")
 
         //if the employee id is not present give back all data
         if (req.query.employee_id == null) {
-            console.log("Requesting Journals");
             pool.getConnection((err, conn) => {
                 if (err) throw err; //not connected
                 //query the database
@@ -35,7 +34,6 @@ router.route("/")
         //if the id is present then we will give back on their journals
         else {
             const employee_id = req.query.employee_id;
-            console.log("Requesting Journals");
             pool.getConnection((err, conn) => {
                 if (err) throw err; //not connected
                 //query the database
@@ -60,7 +58,6 @@ router.route("/")
     })
 
     .post(async (req, res) => {
-        console.log("Adding Journal");
         //information sent to here
         const givingID = req.body.givingID;
         const receivingID = req.body.receivingID;
@@ -85,8 +82,6 @@ router.route("/")
     //delete a single journal
     //uses body requests, it does not say this is bad but it could be looked into
     .delete((req, res) => {
-        //get the information that we want to add
-        console.log("Requested to Delete Journal");
         //information the server is receiving
         const journal_id = req.body.journal_id
 
@@ -100,7 +95,6 @@ router.route("/")
             conn.query(qry, [journal_id], (error, result) => {
                 conn.release();
                 if (error) throw error;
-                console.log("Journal Deleted");
                 res.json(result);
             })
         })

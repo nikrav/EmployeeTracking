@@ -7,13 +7,13 @@ function Journals(props) {
     const [journals, setJournals] = useState([]);
     //this state will be switched everytime in order to reset the journal flow
     const [stateTracker, setStateTracker] = useState(false)
-    
+
     var fetchAddress;
 
     //if props.oneEmployee does not exist then we display all messages else display that employees messages
-    if(props.id === undefined){
+    if (props.id === undefined) {
         fetchAddress = process.env.REACT_APP_PROXY + "/journals";
-    } else{
+    } else {
         fetchAddress = process.env.REACT_APP_PROXY + "/journals?employee_id=" + props.id;
     }
 
@@ -24,7 +24,7 @@ function Journals(props) {
             //turns data into json
             .then(res => res.json())
             //put the data into the journals state
-            .then(journalData => {setJournals(journalData);;})
+            .then(journalData => { setJournals(journalData);; })
             //catches errors
             .catch(err => console.log(err));
     }, [fetchAddress, stateTracker]);
@@ -33,9 +33,13 @@ function Journals(props) {
     //return the html
     return (
         <div>
-            <PrintJournals journalsToPrint={journals} changeState={setStateTracker} state={stateTracker}/>
-            <h3 className="text-center"><u>Add a New Journal</u></h3>
-            <WriteJournals changeState={setStateTracker} state={stateTracker}/>
+            <button data-bs-toggle="modal" data-bs-target="#addJournalModal" type="button" className="mt-5 btn btn-primary add-journal-btn">Add Journal</button>
+            <div className="modal fade" id="addJournalModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                {/* should reset journal after submitting */}
+                {!stateTracker && <WriteJournals changeState={setStateTracker} state={stateTracker}/>}
+                {stateTracker && <WriteJournals changeState={setStateTracker} state={stateTracker}/>}
+            </div>
+            <PrintJournals journalsToPrint={journals} changeState={setStateTracker} state={stateTracker} />
         </div>
     );
 };

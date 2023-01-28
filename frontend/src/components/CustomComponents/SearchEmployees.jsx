@@ -48,7 +48,7 @@ function SearchEmployees(props) {
             }
         }
         else {
-            setUrl("/employees")
+            setUrl("/employees");
         }
         fetch(process.env.REACT_APP_PROXY + url)
             .then(res => res.json())
@@ -75,13 +75,11 @@ function SearchEmployees(props) {
 
     return (
         <div ref={ref} className="search-bar" style={props.classItem}>
-            <form>
-                <input className="mx-0 text-center" type="search" value={inputName} onChange={handleChange} onClick={() => { props.setShow(true) }} />
-            </form>
+            <input className="mx-0 text-center" type="search" value={inputName} onChange={handleChange} onClick={() => { props.setShow(true) }} />
             <ul className="list-group position-absolute">
                 {props.show && listOfNames.map(employee => {
                     //this will return the list of employees and also set the employee id when clicked
-                    return <li className="border-2 list-group-item list-group-item-primary list-group-item-action text-center" onClick={() => handleClick(employee)} key={employee.employee_id}>{employee.fName} {employee.lName}</li>
+                    return <li key={employee.employee_id} className="border-2 list-group-item list-group-item-primary list-group-item-action text-center" onClick={() => { handleClick(employee) }}>{employee.fName} {employee.employee_id} {employee.lName}</li>
                 })}
             </ul>
         </div>

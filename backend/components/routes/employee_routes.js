@@ -14,7 +14,6 @@ router.route("/")
 
             //get the order by field
             const orderBy = req.query.orderBy;
-            console.log(orderBy);
             //string we will add to the end of the query to determine what it will be ordered by
             let qryEnd;
 
@@ -44,17 +43,12 @@ router.route("/")
 
             //qry we want to run
             const qry = 
-            `SELECT employees.employee_id, employees.fName, employees.lName,  (count(goodJournals.good_bad_info) + count(badJournals.good_bad_info) + count(infoJournals.good_bad_info)) as numOfTotal ,count(goodJournals.good_bad_info) as numOfGood, count(infoJournals.good_bad_info) as numOfInfo, count(badJournals.good_bad_info) as numOfBad
+            `SELECT employee_id ,fName, lName, count(good_bad_info) as numOfTotal, SUM(CASE WHEN good_bad_info='good' THEN 1 ELSE 0 END) as numOfGood, SUM(CASE WHEN good_bad_info='bad' THEN 1 ELSE 0 END) as numOfBad, SUM(CASE WHEN good_bad_info='info' THEN 1 ELSE 0 END) as numOfInfo
             FROM employees
-            LEFT JOIN journals as infoJournals
-            ON infoJournals.receiving_id=employee_id AND infoJournals.good_bad_info="info"
-            LEFT JOIN journals as goodJournals
-            ON goodJournals.receiving_id=employee_id AND goodJournals.good_bad_info="good"
-            LEFT JOIN journals as badJournals
-            ON badJournals.receiving_id=employee_id AND badJournals.good_bad_info="bad"
-            GROUP BY employee_id, infoJournals.good_bad_info, goodJournals.good_bad_info, badJournals.good_bad_info
+            LEFT JOIN journals 
+            ON employees.employee_id = receiving_id
+            GROUP BY employee_id
             ORDER BY `
-            console.log("Requesting All Employees");
 
 
             pool.getConnection((err, conn) => {
@@ -71,7 +65,6 @@ router.route("/")
         }
         //if fName does exist and lName does not
         else if (req.query.lName == null){
-            console.log("Searching Employees");
             const fName = req.query.fName;
             pool.getConnection((err, conn) => {
                 if (err) throw err; //not connected
@@ -87,7 +80,6 @@ router.route("/")
         } 
         //if there is both a fName and a lName
         else{
-            console.log("Searching Employees");
             const fName = req.query.fName;
             const lName = req.query.lName;
             pool.getConnection((err, conn) => {
@@ -107,7 +99,6 @@ router.route("/")
     //add a new employee
     .post((req, res) => {
         //get the information that we want to add
-        console.log("Requested to Add Employee");
         const fName = req.body.fName;
         const lName = req.body.lName;
 
@@ -122,7 +113,6 @@ router.route("/")
                 conn.release();
                 if (error) throw error;
                 res.json(result);
-                console.log("Employee Added");
             })
         })
 
@@ -132,7 +122,6 @@ router.route("/")
     //uses body requests, it does not say this is bad but it could be looked into
     .delete((req, res) => {
         //get the information that we want to add
-        console.log("Requested to Delete Employee");
         const fName = req.body.fName;
         const lName = req.body.lName;
 
@@ -147,7 +136,6 @@ router.route("/")
                 conn.release();
                 if (error) throw error;
                 res.json(result);
-                console.log("Employee Added");
             })
         })
     })
