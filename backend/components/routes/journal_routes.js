@@ -8,19 +8,41 @@ const pool = require('./db.js');
 router.route("/")
     .get(async (req, res) => {
 
+        var showString;
+
+        //WHEN YOU GET BACK ADD show FOR JOURNALS
+        switch(req.query.show){
+            case "All":
+                showString = "";
+                break;
+            case "Good":
+                showString = "WHERE journals.good_bad_info='good'";
+                break;
+            case "Info":
+                showString = "WHERE journals.good_bad_info='info'";
+                break;
+            case "Bad":
+                showString = "WHERE journals.good_bad_info='bad'";
+                break;
+            default:
+                showString = "";
+                break;
+        }
+
         //if the employee id is not present give back all data
         if (req.query.employee_id == null) {
             pool.getConnection((err, conn) => {
                 if (err) throw err; //not connected
                 //query the database
                 const qry = (
-                    `select journals.journal_id, employees.fName, employees.lName, journals.j_date, journals.good_bad_info, journals.content, giver.fName as g_fName, giver.lName as g_lName 
-                    from employees 
-                    join journals 
-                    on employees.employee_id = journals.receiving_id 
-                    join employees as giver 
-                    on giver.employee_id = journals.giving_id 
-                    ORDER BY j_date DESC;`
+                    `SELECT journals.journal_id, employees.fName, employees.lName, journals.j_date, journals.good_bad_info, journals.content, giver.fName as g_fName, giver.lName as g_lName 
+                    FROM employees 
+                    JOIN journals 
+                    ON employees.employee_id = journals.receiving_id 
+                    JOIN employees as giver 
+                    ON giver.employee_id = journals.giving_id ` +  
+                    showString +  
+                    `ORDER BY j_date DESC;`
                 );
                 conn.query(qry, function (error, result, fields) {
                     //send the result in a json
@@ -44,10 +66,10 @@ router.route("/")
                     on employees.employee_id = journals.receiving_id 
                     join employees as giver 
                     on giver.employee_id = journals.giving_id 
-                    where journals.receiving_id = ?
+                    where journals.receiving_id=? AND jounrals.good_bad_info=?
                     ORDER BY j_date DESC;`
                 );
-                conn.query(qry, [employee_id], function (error, result, fields) {
+                conn.query(qry, [employee_id, ], function (error, result, fields) {
                     //send the result in a json
                     conn.release();
                     if (error) throw error;

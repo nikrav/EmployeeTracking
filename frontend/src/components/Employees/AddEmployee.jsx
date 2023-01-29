@@ -37,7 +37,6 @@ function AddEmployee(props) {
                 <input type="text" name="lName" required onChange={(change) => setLastName(change.target.value)} />
                 <button type="submit">Add Employee</button>
             </form>
-            {/* CHANGE VARIABLE OR HANDLE INSERTION AND DELETION DIFFERENTLY BECAUSE IF YOU CHANGE THE INSERTION AND HIT DELETE IT WILL DELETE THE NAMES IN INSERTION */}
         </div>
     );
 };

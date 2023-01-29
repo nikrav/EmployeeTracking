@@ -79,7 +79,7 @@ function SearchEmployees(props) {
             <ul className="list-group position-absolute">
                 {props.show && listOfNames.map(employee => {
                     //this will return the list of employees and also set the employee id when clicked
-                    return <li key={employee.employee_id} className="border-2 list-group-item list-group-item-primary list-group-item-action text-center" onClick={() => { handleClick(employee) }}>{employee.fName} {employee.employee_id} {employee.lName}</li>
+                    return <li key={employee.employee_id} className="border-2 list-group-item list-group-item-primary list-group-item-action text-center" onClick={() => { handleClick(employee) }}>{employee.fName} {employee.lName}</li>
                 })}
             </ul>
         </div>
