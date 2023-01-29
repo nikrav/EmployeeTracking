@@ -8,7 +8,17 @@ function Journals(props) {
     //this state will be switched everytime in order to reset the journal flow
     const [stateTracker, setStateTracker] = useState(false)
     //option to show all journals, good journals, bad journals, or infor journals
-    const [show, setShow] = useState("All");
+    const [show, setShow] = useState("Show");
+    //get todays date
+    const today = new Date();
+    //get a week agos date
+    const weekAgo = new Date();
+    weekAgo.setDate(weekAgo.getDate()-7)
+    //dates to do journals for, first is the week ago date
+    const [startDate, setStartDate] = useState(weekAgo.toISOString().substring(0,10));
+    //this is todays date
+    const [endDate, setEndDate] = useState(today.toISOString().substring(0,10));
+    const [fromToAPIString, setFromToAPIString] = useState("&from=" + startDate + "&to=" + endDate);
 
     var findEmployee;
 
@@ -16,42 +26,76 @@ function Journals(props) {
     if (props.id === undefined) {
         findEmployee = "";
     } else {
-        findEmployee = "/&employee_id=" + props.id;
+        findEmployee = "&employee_id=" + props.id;
     }
 
     //the information we are getting from the backend
     useEffect(() => {
         //get request
-        fetch(process.env.REACT_APP_PROXY + "/journals?show=" + show + findEmployee )
+        fetch(process.env.REACT_APP_PROXY + "/journals?show=" + show + fromToAPIString +findEmployee)
             //turns data into json
             .then(res => res.json())
             //put the data into the journals state
             .then(journalData => { setJournals(journalData);; })
             //catches errors
             .catch(err => console.log(err));
-    }, [findEmployee, stateTracker, show]);
+    }, [findEmployee, stateTracker, show, fromToAPIString]);
     // [] at the end determines when to make the request, [ ] by itself only makes the request once
+
+    //if the new date is empty then keep it the same
+    function shouldResetEnd(date){
+        if(date === ""){
+            alert("Please Enter a Valid Date")
+        } else {
+            setEndDate(date);
+            setFromToAPIString("&from=" + startDate + "&to=" + date);
+        }
+    }
+
+    //if the new date is empty then keep it the same
+    function shouldResetStart(date){
+        if(date === ""){
+            alert("Please DO NOT Use Backspace");
+        } else {
+            setStartDate(date);
+            setFromToAPIString("&from=" + date + "&to=" + endDate);
+        }
+    }
 
     //return the html
     return (
         <div>
             <div className="mt-5 add-journal-btn row">
-                <div className="col-5"></div>
-                <div className="col-2 p-0">
-                    <div className="dropdown d-inline-block">
-                        <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Show
-                        </button>
-                        <ul className="dropdown-menu">
-                            {/*When a button is clicked, it changes the show state so that the order can be changed in the get request */}
-                            <li><button onClick={() => setShow("All")} className="dropdown-item">All</button></li>
-                            <li><button onClick={() => setShow("Good")} className="dropdown-item">Good</button></li>
-                            <li><button onClick={() => setShow("Info")} className="dropdown-item">Info</button></li>
-                            <li><button onClick={() => setShow("Bad")} className="dropdown-item">Bad</button></li>
-                        </ul>
+                <div className="col-lg-3"></div>
+
+                <div className="col-12 col-lg-6">
+                    <div className="row mx-2">
+                    <div className="dropdown col-6 d-grid">
+                            <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {show}
+                            </button>
+                            <ul className="dropdown-menu">
+                                {/*When a button is clicked, it changes the show state so that the order can be changed in the get request */}
+                                <li><button onClick={() => setShow("All")} className="dropdown-item">All</button></li>
+                                <li><button onClick={() => setShow("Good")} className="dropdown-item">Good</button></li>
+                                <li><button onClick={() => setShow("Info")} className="dropdown-item">Info</button></li>
+                                <li><button onClick={() => setShow("Bad")} className="dropdown-item">Bad</button></li>
+                            </ul>
+                        </div>
+                        <div className="col-6 d-grid">
+                            <button data-bs-toggle="modal" data-bs-target="#addJournalModal" type="button" className="btn btn-primary">Add Journal</button>
+                        </div>
+                        <div className="col-6 d-grid">
+                            <label>From:</label>
+                            <input type="date" value={startDate} className="btn btn-secondary" onChange={(e)=>shouldResetStart(e.target.value)}></input>
+                        </div>
+                        <div className="col-6 d-grid">
+                            <label>To:</label>
+                            <input type="date" value={endDate} className="btn btn-secondary" onChange={(e)=>shouldResetEnd(e.target.value)}></input>
+                        </div>
                     </div>
-                    <button data-bs-toggle="modal" data-bs-target="#addJournalModal" type="button" className="btn btn-primary d-inline-block float-end">Add Journal</button>
                 </div>
+
             </div>
             <div className="modal fade" id="addJournalModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 {/* should reset journal after submitting */}
