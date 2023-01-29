@@ -1,6 +1,6 @@
 // must be called like this outside in parent
 // const [showInfo, setShowInfo] = useState(false);
-// <SearchEmployees setShow={setShowInfo} show={showInfo} onClickOutside={() => {setShowInfo(false)}}/>
+// <SearchEmployees setShow={setShowInfo} show={showInfo} onClickOutside={() => {setShowInfo(false)} setID={setEmployee_id}}/>
 
 
 import React, { useState, useEffect, useRef } from "react";
@@ -48,7 +48,7 @@ function SearchEmployees(props) {
             }
         }
         else {
-            setUrl("/employees");
+            setUrl("/employees?searching=true");
         }
         fetch(process.env.REACT_APP_PROXY + url)
             .then(res => res.json())
@@ -58,7 +58,7 @@ function SearchEmployees(props) {
             })
             //catches errors
             .catch(err => console.log(err));
-    }, [inputName, url])
+    }, [props.state, inputName, url])
 
     const handleChange = (e) => {
         setInputName(e.target.value);

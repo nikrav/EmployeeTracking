@@ -65,7 +65,7 @@ function Journals(props) {
     //return the html
     return (
         <div>
-            <div className="mt-5 add-journal-btn row">
+            <div className="mt-5 row">
                 <div className="col-lg-3"></div>
 
                 <div className="col-12 col-lg-6">

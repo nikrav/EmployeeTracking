@@ -20,7 +20,7 @@ function WriteJournals(props) {
         shouldSubmit();
     //if any of the states change then run shouldSubmit
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[newJournalDate, journalType, info, employeeID, employeeIDGiving])
+    },[newJournalDate, journalType, info, employeeID, employeeIDGiving]);
 
     function submitJournal(evt) {
 
@@ -90,7 +90,7 @@ function WriteJournals(props) {
                 </div>
                 <div className="modal-footer">
                     <input type="date" className="d-inline-block mb-0 ms-0" onChange={(e) => setNewJournalDate(e.target.value)}></input>
-                    <SearchEmployees classItem={{ position: "relative", float: "right" }} setID={setEmployeeIDGiving} setShow={setShowInfoGiving} show={showInfoGiving} onClickOutside={() => { setShowInfoGiving(false) }} />
+                    <SearchEmployees state={props.state} setState={props.setStateTracker} classItem={{ position: "relative", float: "right" }} setID={setEmployeeIDGiving} setShow={setShowInfoGiving} show={showInfoGiving} onClickOutside={() => { setShowInfoGiving(false) }} />
                 </div>
             </div>
         </div>

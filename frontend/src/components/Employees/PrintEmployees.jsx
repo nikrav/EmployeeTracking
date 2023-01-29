@@ -6,7 +6,7 @@ import DeleteEmployee from "./DeleteEmployee";
 function PrintEmployees() {
     const [employees, setEmployees] = useState([]);
     //send this with get request to order page
-    const [orderBy, setOrderBy] = useState("Last Name");
+    const [orderBy, setOrderBy] = useState("Order By");
     //turn employee overlay off at start, represented by 0
     const [employeeOverlay, setEmployeeOverlay] = useState(false);
     const [clickedEmployee, setClickedEmpoyee] = useState("")
@@ -30,22 +30,44 @@ function PrintEmployees() {
     return (
         <div>
             {/* if the employee overlay is toggled then display it */}
-            {employeeOverlay && <OneEmployeesJournals id={clickedEmployee}/> }
-            <div className="dropdown">
-                <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Order By
-                </button>
-                <ul className="dropdown-menu">
-                    {/*When a button is clicked, it changes the orderBy state so that the order can be changed in the get request */}
-                    <li><button onClick={() => setOrderBy("First Name")} className="dropdown-item">First Name</button></li>
-                    <li><button onClick={() => setOrderBy("Last Name")} className="dropdown-item">Last Name</button></li>
-                    <li><button onClick={() => setOrderBy("Total")} className="dropdown-item">Total</button></li>
-                    <li><button onClick={() => setOrderBy("Good")} className="dropdown-item">Good</button></li>
-                    <li><button onClick={() => setOrderBy("Info")} className="dropdown-item">Info</button></li>
-                    <li><button onClick={() => setOrderBy("Bad")} className="dropdown-item">Bad</button></li>
-                </ul>
+            {employeeOverlay && <OneEmployeesJournals id={clickedEmployee} />}
+            <div className="my-5 row">
+                <div className="col-lg-3"></div>
+
+                <div className="col-12 col-lg-6">
+                    <div className="row mx-2">
+                        <div className="dropdown col-12 col-sm-4 d-grid py-1">
+                            <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">{orderBy}</button>
+                            <ul className="dropdown-menu">
+                                {/*When a button is clicked, it changes the orderBy state so that the order can be changed in the get request */}
+                                <li><button onClick={() => setOrderBy("First Name")} className="dropdown-item">First Name</button></li>
+                                <li><button onClick={() => setOrderBy("Last Name")} className="dropdown-item">Last Name</button></li>
+                                <li><button onClick={() => setOrderBy("Total")} className="dropdown-item">Total</button></li>
+                                <li><button onClick={() => setOrderBy("Good")} className="dropdown-item">Good</button></li>
+                                <li><button onClick={() => setOrderBy("Info")} className="dropdown-item">Info</button></li>
+                                <li><button onClick={() => setOrderBy("Bad")} className="dropdown-item">Bad</button></li>
+                            </ul>
+                        </div>
+                        <div className="col-6 col-sm-4 d-grid py-1">
+                            <button className="btn btn-primary" type="button" aria-expanded="false" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">Add Employee</button>
+                            <div className="modal" id="addEmployeeModal" aria-hidden="true">
+                                {stateTracker && <AddEmployee state={stateTracker} changeState={setStateTracker} />}
+                                {!stateTracker && <AddEmployee state={stateTracker} changeState={setStateTracker} />}
+                            </div>
+                        </div>
+                        <div className="col-6 col-sm-4 d-grid py-1">
+                            <button className="btn btn-danger" type="button" aria-expanded="false" data-bs-toggle="modal" data-bs-target="#deleteEmployeeModal">Delete Employee</button>
+                            <div className="modal" id="deleteEmployeeModal" aria-hidden="true">
+                                {stateTracker && <DeleteEmployee state={stateTracker} changeState={setStateTracker} />}
+                                {!stateTracker && <DeleteEmployee state={stateTracker} changeState={setStateTracker} />}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
-            <p>Currently Ordered By: {orderBy}</p>
+
             <table className="table table-light table-hover">
                 <thead>
                     <tr>
@@ -60,7 +82,7 @@ function PrintEmployees() {
                 <tbody>
                     {employees.map(employee => (
                         //on click we are going to pass the emplooyee_id to the setClickedEmployee and activate the overlay
-                        <tr key={employee.employee_id} onClick={() => {setClickedEmpoyee(employee.employee_id); setEmployeeOverlay(true);}}>
+                        <tr key={employee.employee_id} onClick={() => { setClickedEmpoyee(employee.employee_id); setEmployeeOverlay(true); }}>
                             <td>{employee.fName}</td>
                             <td>{employee.lName}</td>
                             <td>{employee.numOfTotal}</td>
@@ -71,8 +93,6 @@ function PrintEmployees() {
                     ))}
                 </tbody>
             </table>
-            <AddEmployee state={stateTracker} changeState={setStateTracker}/>
-            <DeleteEmployee state={stateTracker} changeState={setStateTracker}/>
         </div>
     );
 

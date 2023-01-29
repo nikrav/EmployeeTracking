@@ -10,66 +10,89 @@ router.route("/")
     .get(async (req, res) => {
 
         //find all employees if fName does not exist
+
         if (req.query.fName == null) {
+            if (req.query.searching != null) {
 
-            //get the order by field
-            const orderBy = req.query.orderBy;
-            //string we will add to the end of the query to determine what it will be ordered by
-            let qryEnd;
+                const qry = `SELECT employee_id ,fName, lName
+                            FROM employees
+                            LEFT JOIN journals 
+                            ON employees.employee_id = receiving_id
+                            ORDER BY lName, fName   
+                            LIMIT 3;`
 
-            switch(orderBy){
-                case "Good":
-                    qryEnd = "numOfGood DESC, lName, fName";
-                    break;
-                case "Bad":
-                    qryEnd = "numOfBad DESC, lName, fName";
-                    break;
-                case "Info":
-                    qryEnd = "numOfInfo DESC, lName, fName";
-                    break;
-                case "First Name":
-                    qryEnd = "fName, lName";
-                    break;
-                case "Last Name":
-                    qryEnd = "lName, fName";
-                    break;
-                case "Total":
-                    qryEnd = "numOfTotal DESC, lName, fName";
-                    break;
-                default:
-                    qryEnd = "lName, fName";
-                    break;
-            }
-
-            //qry we want to run
-            const qry = 
-            `SELECT employee_id ,fName, lName, count(good_bad_info) as numOfTotal, SUM(CASE WHEN good_bad_info='good' THEN 1 ELSE 0 END) as numOfGood, SUM(CASE WHEN good_bad_info='bad' THEN 1 ELSE 0 END) as numOfBad, SUM(CASE WHEN good_bad_info='info' THEN 1 ELSE 0 END) as numOfInfo
-            FROM employees
-            LEFT JOIN journals 
-            ON employees.employee_id = receiving_id
-            GROUP BY employee_id
-            ORDER BY `
-
-
-            pool.getConnection((err, conn) => {
-                if (err) throw err; //not connected
-                //query the database
-                //if you use qrt, [endQry] it does not work because it adds ''
-                conn.query(qry + qryEnd + ";", function (error, result, fields) {
-                    //send the result in a json
-                    conn.release();
-                    if (error) throw error;
-                    res.json(result);
+                pool.getConnection((err, conn) => {
+                    if (err) throw err; //not connected
+                    //query the database
+                    //if you use qrt, [endQry] it does not work because it adds ''
+                    conn.query(qry, function (error, result, fields) {
+                        //send the result in a json
+                        conn.release();
+                        if (error) throw error;
+                        res.json(result);
+                    })
                 })
-            })
+            } else {
+
+                //get the order by field
+                const orderBy = req.query.orderBy;
+                //string we will add to the end of the query to determine what it will be ordered by
+                let qryEnd;
+
+                switch (orderBy) {
+                    case "Good":
+                        qryEnd = "numOfGood DESC, lName, fName";
+                        break;
+                    case "Bad":
+                        qryEnd = "numOfBad DESC, lName, fName";
+                        break;
+                    case "Info":
+                        qryEnd = "numOfInfo DESC, lName, fName";
+                        break;
+                    case "First Name":
+                        qryEnd = "fName, lName";
+                        break;
+                    case "Last Name":
+                        qryEnd = "lName, fName";
+                        break;
+                    case "Total":
+                        qryEnd = "numOfTotal DESC, lName, fName";
+                        break;
+                    default:
+                        qryEnd = "lName, fName";
+                        break;
+                }
+
+                //qry we want to run
+                const qry =
+                    `SELECT employee_id ,fName, lName, count(good_bad_info) as numOfTotal, SUM(CASE WHEN good_bad_info='good' THEN 1 ELSE 0 END) as numOfGood, SUM(CASE WHEN good_bad_info='bad' THEN 1 ELSE 0 END) as numOfBad, SUM(CASE WHEN good_bad_info='info' THEN 1 ELSE 0 END) as numOfInfo
+                    FROM employees
+                    LEFT JOIN journals 
+                    ON employees.employee_id = receiving_id
+                    GROUP BY employee_id
+                    ORDER BY `
+
+
+                pool.getConnection((err, conn) => {
+                    if (err) throw err; //not connected
+                    //query the database
+                    //if you use qrt, [endQry] it does not work because it adds ''
+                    conn.query(qry + qryEnd + ";", function (error, result, fields) {
+                        //send the result in a json
+                        conn.release();
+                        if (error) throw error;
+                        res.json(result);
+                    })
+                })
+            }
         }
         //if fName does exist and lName does not
-        else if (req.query.lName == null){
+        else if (req.query.lName == null) {
             const fName = req.query.fName;
             pool.getConnection((err, conn) => {
                 if (err) throw err; //not connected
                 //query the database for employees whose last name or first name is like the one entered
-                const qry = "SELECT employee_id, employees.fName, employees.lName FROM employees WHERE employees.fName LIKE '%" + fName + "%' OR employees.lName LIKE '%" + fName + "%' ORDER BY lName, fName;"
+                const qry = "SELECT employee_id, employees.fName, employees.lName FROM employees WHERE employees.fName LIKE '%" + fName + "%' OR employees.lName LIKE '%" + fName + "%' ORDER BY lName, fName LIMIT 3;"
                 conn.query(qry, function (error, result, fields) {
                     //send the result in a json
                     conn.release();
@@ -77,15 +100,15 @@ router.route("/")
                     res.json(result);
                 })
             })
-        } 
+        }
         //if there is both a fName and a lName
-        else{
+        else {
             const fName = req.query.fName;
             const lName = req.query.lName;
             pool.getConnection((err, conn) => {
                 if (err) throw err; //not connected
                 //query the database for employees whose last name or first name is like the one entered
-                const qry = "SELECT employee_id, employees.fName, employees.lName FROM employees WHERE employees.fName LIKE '%" + fName + "%' AND employees.lName LIKE '%" + lName + "%' ORDER BY lName, fName;"
+                const qry = "SELECT employee_id, employees.fName, employees.lName FROM employees WHERE employees.fName LIKE '%" + fName + "%' AND employees.lName LIKE '%" + lName + "%' ORDER BY lName, fName LIMIT 3;"
                 conn.query(qry, [fName, lName], function (error, result, fields) {
                     //send the result in a json
                     conn.release();
@@ -94,7 +117,7 @@ router.route("/")
                 })
             })
         }
-        
+
     })
     //add a new employee
     .post((req, res) => {
@@ -122,17 +145,16 @@ router.route("/")
     //uses body requests, it does not say this is bad but it could be looked into
     .delete((req, res) => {
         //get the information that we want to add
-        const fName = req.body.fName;
-        const lName = req.body.lName;
+        const id = req.body.id;
 
         //connect to the database
         pool.getConnection((err, conn) => {
             if (err) throw err;
             //IS BAD FOR PEOPLE WITH THE SAME NAME, DELETES THEM BOTH
             //set up the string, the ? ? represent variables that we will imput later
-            const qry = "DELETE FROM employee_tracker.employees WHERE (fName=? AND lName= ?);"
+            const qry = "DELETE FROM employee_tracker.employees WHERE employees.employee_id=?;"
             //run the insert command
-            conn.query(qry, [fName, lName], (error, result) => {
+            conn.query(qry, [id], (error, result) => {
                 conn.release();
                 if (error) throw error;
                 res.json(result);

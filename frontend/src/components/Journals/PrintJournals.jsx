@@ -13,7 +13,7 @@ function PrintJournals(props) {
             {
                 //if journal is being selected to delete siplay this, also pass the parents function into the props
                 <div className="modal fade" id="deleteModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <DeleteJournal changeState={props.changeState} state={props.state} journal_id={journalToDelete} />
+                    <DeleteJournal state={props.state} journal_id={journalToDelete} />
                 </div>
             }
             {props.journalsToPrint.map((journal) => {
