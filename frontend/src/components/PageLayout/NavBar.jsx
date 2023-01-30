@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function NavBar() {
     return (
-        <nav id="navbar-for-page" className="fw-bolder border-bottom border-5 opacity-100 border-dark navbar navbar-expand-lg bg-white bg-graident navbar-white positions">
+        <nav id="navbar-for-page" className="fw-bolder border-bottom border-5 opacity-100 border-dark navbar navbar-expand-lg bg-white bg-graident navbar-white">
             {/*The navbar which holds the navigation elements*/}
             {/*The navbar collapse button that is displayed when the navbar is shrunk*/}
             <button className="navbar-toggler me-4" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">

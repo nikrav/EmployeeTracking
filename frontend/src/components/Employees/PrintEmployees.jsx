@@ -7,8 +7,6 @@ function PrintEmployees() {
     const [employees, setEmployees] = useState([]);
     //send this with get request to order page
     const [orderBy, setOrderBy] = useState("Order By");
-    //turn employee overlay off at start, represented by 0
-    const [employeeOverlay, setEmployeeOverlay] = useState(false);
     const [clickedEmployee, setClickedEmpoyee] = useState("")
     const [stateTracker, setStateTracker] = useState(false)
 
@@ -30,7 +28,15 @@ function PrintEmployees() {
     return (
         <div>
             {/* if the employee overlay is toggled then display it */}
-            {employeeOverlay && <OneEmployeesJournals id={clickedEmployee} />}
+            <div className="modal fade p-0" id="journalsModal" tabIndex="-1" aria-hidden="true">
+                <div className="modal-dialog modal-xl">
+                    <div className="modal-content">
+                        <div className="modal-body">
+                            <OneEmployeesJournals id={clickedEmployee} />
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div className="my-5 row">
                 <div className="col-lg-3"></div>
 
@@ -50,14 +56,14 @@ function PrintEmployees() {
                         </div>
                         <div className="col-6 col-sm-4 d-grid py-1">
                             <button className="btn btn-primary" type="button" aria-expanded="false" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">Add Employee</button>
-                            <div className="modal" id="addEmployeeModal" aria-hidden="true">
+                            <div className="modal" id="addEmployeeModal" tabIndex="-1" aria-hidden="true">
                                 {stateTracker && <AddEmployee state={stateTracker} changeState={setStateTracker} />}
                                 {!stateTracker && <AddEmployee state={stateTracker} changeState={setStateTracker} />}
                             </div>
                         </div>
                         <div className="col-6 col-sm-4 d-grid py-1">
                             <button className="btn btn-danger" type="button" aria-expanded="false" data-bs-toggle="modal" data-bs-target="#deleteEmployeeModal">Delete Employee</button>
-                            <div className="modal" id="deleteEmployeeModal" aria-hidden="true">
+                            <div className="modal" id="deleteEmployeeModal" tabIndex="-1" aria-hidden="true">
                                 {stateTracker && <DeleteEmployee state={stateTracker} changeState={setStateTracker} />}
                                 {!stateTracker && <DeleteEmployee state={stateTracker} changeState={setStateTracker} />}
                             </div>
@@ -82,7 +88,7 @@ function PrintEmployees() {
                 <tbody>
                     {employees.map(employee => (
                         //on click we are going to pass the emplooyee_id to the setClickedEmployee and activate the overlay
-                        <tr key={employee.employee_id} onClick={() => { setClickedEmpoyee(employee.employee_id); setEmployeeOverlay(true); }}>
+                        <tr key={employee.employee_id} aria-expanded="false" data-bs-toggle="modal" data-bs-target="#journalsModal" onClick={() => { setClickedEmpoyee(employee.employee_id); }}>
                             <td>{employee.fName}</td>
                             <td>{employee.lName}</td>
                             <td>{employee.numOfTotal}</td>

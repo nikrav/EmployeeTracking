@@ -12,7 +12,7 @@ function SearchEmployees(props) {
 
     const [inputName, setInputName] = useState("");
     //url we will use to get the information in fetch
-    const [url, setUrl] = useState("/employees")
+    const [url, setUrl] = useState("/employees?searching=true")
     const [listOfNames, setListOfNames] = useState([]);
 
     useEffect(() => {

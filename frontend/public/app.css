@@ -1,12 +1,10 @@
 html,
 body {
-    /* removes side scrolling, this is not the best practice */
-    max-width: 100%;
-    overflow-x: hidden;
     /* puts content at the bottom */
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    padding-right: 0 !important;
 }
 
 .search-bar {
@@ -27,4 +25,8 @@ body {
 
 .text-box {
     width: 100%;
+}
+
+.row{
+    margin: auto
 }

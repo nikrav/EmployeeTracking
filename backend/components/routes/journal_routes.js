@@ -64,7 +64,7 @@ router.route("/")
                     ON employees.employee_id = journals.receiving_id 
                     JOIN employees as giver 
                     ON giver.employee_id = journals.giving_id
-                    WHERE` + showString +  `journals.receiving_id=? AND journals.j_date BETWEEN ? AND ? 
+                    WHERE ` + showString +  ` journals.receiving_id=? AND journals.j_date BETWEEN ? AND ? 
                     ORDER BY j_date DESC;`
                 );
                 conn.query(qry, [employee_id, req.query.from, req.query.to], function (error, result, fields) {

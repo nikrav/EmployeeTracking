@@ -97,7 +97,7 @@ function Journals(props) {
                 </div>
 
             </div>
-            <div className="modal fade" id="addJournalModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div className="modal fade" id="addJournalModal" tabIndex="-1" aria-labelledby="addJournalModal" aria-hidden="true">
                 {/* should reset journal after submitting */}
                 {!stateTracker && <WriteJournals changeState={setStateTracker} state={stateTracker} />}
                 {stateTracker && <WriteJournals changeState={setStateTracker} state={stateTracker} />}
