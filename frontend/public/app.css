@@ -27,6 +27,15 @@ body {
     width: 100%;
 }
 
-.row{
+.row {
     margin: auto
+}
+
+h1 ,h3 {
+    font-family: 'Merriweather', serif;
+    color: #062A80;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
 }
