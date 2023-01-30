@@ -27,7 +27,6 @@ function Home() {
                         <li className="list-group-item ms-0">Create a MySQL database to store employee information</li>
                         <li className="list-group-item ms-0">Create a Node.js API that retrieves the infromation from the MySQL database</li>
                         <li className="list-group-item ms-0">Create a React frontend that will generate pages based on the employee database</li>
-                        <li className="list-group-item ms-0">Create a pleasing and appealing UI</li>
                     </ul>
                 </div>
             </div>
