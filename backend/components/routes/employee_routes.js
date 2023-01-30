@@ -8,16 +8,13 @@ const pool = require("./db.js");
 router.route("/")
     //get all employees or a singular employee
     .get(async (req, res) => {
-
         //find all employees if fName does not exist
 
         if (req.query.fName == null) {
-            if (req.query.searching != null) {
+            if (req.query.searching === 'true') {
 
                 const qry = `SELECT employee_id ,fName, lName
                             FROM employees
-                            LEFT JOIN journals 
-                            ON employees.employee_id = receiving_id
                             ORDER BY lName, fName   
                             LIMIT 3;`
 

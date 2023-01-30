@@ -7,7 +7,6 @@ const pool = require('./db.js');
 //it is / because the app in server.js adds the "/journals" already
 router.route("/")
     .get(async (req, res) => {
-
         var showString;
 
         switch(req.query.show){
@@ -27,7 +26,7 @@ router.route("/")
                 showString = "";
                 break;
         }
-        
+
         //if the employee id is not present give back all data
         if (req.query.employee_id == null) {
             pool.getConnection((err, conn) => {
