@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
+import MediaQuery from "react-responsive";
 import OneEmployeesJournals from "../Journals/OneEmployeesJournals";
 import AddEmployee from "./AddEmployee";
 import DeleteEmployee from "./DeleteEmployee";
+
+//add render for above 600 px and add render for below 600 px
 
 function PrintEmployees() {
     const [employees, setEmployees] = useState([]);
@@ -74,15 +77,18 @@ function PrintEmployees() {
 
             </div>
 
+            
             <table className="table table-light table-hover">
                 <thead>
                     <tr>
                         <th scope="col">First Name</th>
                         <th scope="col">Last Name</th>
                         <th scope="col">Total Journals</th>
-                        <th scope="col">Good Journals</th>
-                        <th scope="col">Info Journals</th>
-                        <th scope="col">Bad Journals</th>
+                        <MediaQuery minWidth={600}>
+                            <th scope="col">Good Journals</th>
+                            <th scope="col">Info Journals</th>
+                            <th scope="col">Bad Journals</th>
+                        </MediaQuery>
                     </tr>
                 </thead>
                 <tbody>
@@ -92,9 +98,12 @@ function PrintEmployees() {
                             <td>{employee.fName}</td>
                             <td>{employee.lName}</td>
                             <td>{employee.numOfTotal}</td>
-                            <td>{employee.numOfGood}</td>
-                            <td>{employee.numOfInfo}</td>
-                            <td>{employee.numOfBad}</td>
+                            {/* if the screen is above 600px display this information */}
+                            <MediaQuery minWidth={600}>
+                                <td>{employee.numOfGood}</td>
+                                <td>{employee.numOfInfo}</td>
+                                <td>{employee.numOfBad}</td>
+                            </MediaQuery>
                         </tr>
                     ))}
                 </tbody>
