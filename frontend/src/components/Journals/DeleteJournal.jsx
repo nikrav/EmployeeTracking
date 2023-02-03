@@ -1,4 +1,5 @@
 import React from "react";
+import authHeader from "../services/auth_header";
 
 function DeleteJournal(props) {
 
@@ -16,7 +17,7 @@ function DeleteJournal(props) {
             //type of method we are doing
             method: "DELETE",
             //type of information we are sending
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", authHeader },
             //data we are sending
             body: JSON.stringify(employee)
         })

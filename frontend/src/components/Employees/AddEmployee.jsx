@@ -32,7 +32,7 @@ function AddEmployee(props) {
             }
 
             //sends the post request
-            fetch(process.env.REACT_APP_PROXY + "/employees", {
+            console.log(fetch(process.env.REACT_APP_PROXY + "/employees", {
                 //type of method we are doing
                 method: "POST",
                 //type of information we are sending
@@ -43,7 +43,7 @@ function AddEmployee(props) {
                 props.changeState(props.state ? false : true);
                 setFirstName("");
                 setLastName("");
-            })
+            }))
         }
     }
 

@@ -1,7 +1,16 @@
 /* eslint-disable no-unused-vars */
 const express = require('express');
 const router = express.Router();
-const pool = require('./db.js');
+const pool = require('../config/db.js');
+const authJWT = require('../middleware/auth_JWT')
+
+router.use(function(req, res, next) {
+    res.header(
+      "Access-Control-Allow-Headers",
+      "x-access-token, Origin, Content-Type, Accept"
+    );
+    next();
+  });
 
 //get all journals
 //it is / because the app in server.js adds the "/journals" already
@@ -77,7 +86,7 @@ router.route("/")
         }
     })
 
-    .post(async (req, res) => {
+    .post([authJWT.verifyToken, authJWT.isAdmin],async (req, res) => {
         //information sent to here
         const givingID = req.body.givingID;
         const receivingID = req.body.receivingID;
@@ -101,7 +110,7 @@ router.route("/")
 
     //delete a single journal
     //uses body requests, it does not say this is bad but it could be looked into
-    .delete((req, res) => {
+    .delete([authJWT.verifyToken, authJWT.isAdmin],(req, res) => {
         //information the server is receiving
         const journal_id = req.body.journal_id
 

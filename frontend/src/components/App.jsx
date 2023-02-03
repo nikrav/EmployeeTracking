@@ -4,6 +4,7 @@ import Employees from "./Employees/EmployeesHome";
 import Layout from "./PageLayout/Layout";
 import Home from "./Home/Home";
 import Journals from "./Journals/JournalsHome";
+import Login from "./Login/Login"
 
 function App(){
     return(
@@ -13,6 +14,7 @@ function App(){
                     <Route index element={<Home/>}/>
                     <Route path="employees" element={<Employees />}/>
                     <Route path="journals" element={<Journals />}/>
+                    <Route path="sign-in" element={<Login />}/>
                 </Route>
             </Routes>
         </BrowserRouter>

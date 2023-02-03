@@ -1,7 +1,16 @@
 /* eslint-disable no-unused-vars */
 const express = require("express");
 const router = express.Router();
-const pool = require("./db.js");
+const pool = require("../config/db.js");
+const authJWT = require("../middleware/auth_JWT");
+
+router.use(function(req, res, next) {
+    res.header(
+      "Access-Control-Allow-Headers",
+      "x-access-token, Origin, Content-Type, Accept"
+    );
+    next();
+  });
 
 //for the employees route that allows us to access the employee table in the db
 //it is / because the app adds the "/employees" already
@@ -117,7 +126,8 @@ router.route("/")
 
     })
     //add a new employee
-    .post((req, res) => {
+    //the first parameter is the token verification and authorization, if they dont return true then we dont get into the post
+    .post([authJWT.verifyToken, authJWT.isAdmin],(req, res) => {
         //get the information that we want to add
         const fName = req.body.fName;
         const lName = req.body.lName;
@@ -140,15 +150,12 @@ router.route("/")
     })
     //delete an employee
     //uses body requests, it does not say this is bad but it could be looked into
-    .delete((req, res) => {
+    .delete([authJWT.verifyToken, authJWT.isAdmin],(req, res) => {
         //get the information that we want to add
         const id = req.body.id;
-
         //connect to the database
         pool.getConnection((err, conn) => {
             if (err) throw err;
-            //IS BAD FOR PEOPLE WITH THE SAME NAME, DELETES THEM BOTH
-            //set up the string, the ? ? represent variables that we will imput later
             const qry = "DELETE FROM employee_tracker.employees WHERE employees.employee_id=?;"
             //run the insert command
             conn.query(qry, [id], (error, result) => {

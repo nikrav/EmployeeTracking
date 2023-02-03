@@ -21,6 +21,9 @@ function NavBar() {
                     <li className="nav-item px-3">
                         <Link to="/journals" className="nav-link">Journals</Link>
                     </li>
+                    <li className="nav-item px-3">
+                        <Link to="/sign-in" className="nav-link">Sign-In</Link>
+                    </li>
                 </ul>
             </div>
         </nav>

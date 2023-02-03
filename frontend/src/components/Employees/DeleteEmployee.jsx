@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import SearchEmployees from "../CustomComponents/SearchEmployees";
-
+import SearchEmployees from "../Search/SearchEmployees";
+import authHeader from "../services/auth_header";
 
 function DeleteEmployee(props) {
 
@@ -20,7 +20,7 @@ function DeleteEmployee(props) {
             //type of method we are doing
             method: "DELETE",
             //type of information we are sending
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", authHeader },
             //data we are sending
             body: JSON.stringify(employee)
         }).then(() => {

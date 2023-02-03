@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import SearchEmployees from "../CustomComponents/SearchEmployees";
+import SearchEmployees from "../Search/SearchEmployees";
+import authHeader from "../services/auth_header";
 
 function WriteJournals(props) {
 
@@ -45,7 +46,7 @@ function WriteJournals(props) {
                 //type of method we are doing
                 method: "POST",
                 //type of information we are sending
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json", authHeader },
                 //data we are sending
                 body: JSON.stringify(journal)
                 //if props state is true then we set it to false, and vice versa, this will reload the journals
