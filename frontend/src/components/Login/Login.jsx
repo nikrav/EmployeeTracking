@@ -6,7 +6,7 @@ function Login() {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
 
-    function onSubmit() {
+    function onSubmit(evt) {
         AuthService.login(username, password)
     }
 

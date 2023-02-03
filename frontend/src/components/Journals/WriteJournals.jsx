@@ -46,7 +46,7 @@ function WriteJournals(props) {
                 //type of method we are doing
                 method: "POST",
                 //type of information we are sending
-                headers: { "Content-Type": "application/json", authHeader },
+                headers: { "Content-Type": "application/json", "x-access-token": authHeader() },
                 //data we are sending
                 body: JSON.stringify(journal)
                 //if props state is true then we set it to false, and vice versa, this will reload the journals

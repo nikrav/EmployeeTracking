@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import authHeader from "../services/auth_header";
 
 function AddEmployee(props) {
 
@@ -32,18 +33,18 @@ function AddEmployee(props) {
             }
 
             //sends the post request
-            console.log(fetch(process.env.REACT_APP_PROXY + "/employees", {
+            fetch(process.env.REACT_APP_PROXY + "/employees", {
                 //type of method we are doing
                 method: "POST",
                 //type of information we are sending
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json", "x-access-token": authHeader() },
                 //data we are sending
                 body: JSON.stringify(employee)
             }).then(() => {
                 props.changeState(props.state ? false : true);
                 setFirstName("");
                 setLastName("");
-            }))
+            })
         }
     }
 

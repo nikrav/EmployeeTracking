@@ -3,7 +3,7 @@ import axios from "axios";
 class AuthService {
   login(username, password) {
     return axios
-      .post(process.env.REACT_APP_PROXY + "sign-in", {
+      .post(process.env.REACT_APP_PROXY + "/sign-in", {
         username,
         password
       })
@@ -25,4 +25,5 @@ class AuthService {
   }
 }
 
-export default AuthService;
+// eslint-disable-next-line import/no-anonymous-default-export
+export default new AuthService();

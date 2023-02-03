@@ -66,7 +66,7 @@ const isAdmin = (req, res, next) => {
         
         role = result[0].name;
         console.log(role)
-        //terrible setup, i just dont know how to use await and promises correctly yet, COME BACK AND FIX THIS
+        //terrible setup, i just dont know how to use await and promises correctly yet, COME BACK AND FIX
         if (role === "admin") {
           next();
           return;

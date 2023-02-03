@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import authService from "../services/auth_service";
 
 function NavBar() {
+
     return (
         <nav id="navbar-for-page" className="fw-bolder border-bottom border-5 opacity-100 border-dark navbar navbar-expand-lg bg-white bg-graident navbar-white">
             {/*The navbar which holds the navigation elements*/}
@@ -24,6 +27,10 @@ function NavBar() {
                     <li className="nav-item px-3">
                         <Link to="/sign-in" className="nav-link">Sign-In</Link>
                     </li>
+                    {authService.getCurrentUser() && 
+                    <li>
+                        <button className="nav-item btn btn-primary p-1" onClick={authService.logout}>Sign-Out</button>
+                    </li>}
                 </ul>
             </div>
         </nav>

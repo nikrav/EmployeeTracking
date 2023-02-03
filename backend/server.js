@@ -16,7 +16,6 @@ const app = express();
 //where we will allow cors
 const corsOptions = {
     origin: process.env.CORS,
-    allowedHeaders: ["x-access-token", "Origin", "Content-Type", "Accept"]
 };
 
 app.use(bodyParser.urlencoded({ extended: true }));
