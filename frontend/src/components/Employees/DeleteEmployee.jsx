@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import SearchEmployees from "../Search/SearchEmployees";
-import authHeader from "../services/auth_header";
+import React, { useState } from "react"
+import SearchEmployees from "../Search/SearchEmployees"
+import authHeader from "../services/auth_header"
 
 function DeleteEmployee(props) {
 
-    const [showInfo, setShowInfo] = useState(false);
-    const [employee_id, setEmployee_id] = useState("");
+    const [showInfo, setShowInfo] = useState(false)
+    const [employee_id, setEmployee_id] = useState("")
 
     function handleClick() {
         //stops page from refreshing after submit
-        // evt.preventDefault();
+        // evt.preventDefault()
         //object we are going to send/post
         const employee = {
             id: employee_id
@@ -23,9 +23,12 @@ function DeleteEmployee(props) {
             headers: { "Content-Type": "application/json", "x-access-token": authHeader() },
             //data we are sending
             body: JSON.stringify(employee)
-        }).then(() => {
+        }).then((response) => {
             props.changeState(props.state ? false : true)
-        })
+            if(response.status === 401 || response.status === 403){
+                alert("Requires Admin Account")
+            }
+        }).catch((error)=> console.log(error))
     }
 
     return (
@@ -48,6 +51,6 @@ function DeleteEmployee(props) {
         </div>
 
     )
-};
+}
 
-export default DeleteEmployee;
+export default DeleteEmployee

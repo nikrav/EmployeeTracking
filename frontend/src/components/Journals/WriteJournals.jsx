@@ -1,32 +1,32 @@
-import React, { useEffect, useState } from "react";
-import SearchEmployees from "../Search/SearchEmployees";
-import authHeader from "../services/auth_header";
+import React, { useEffect, useState } from "react"
+import SearchEmployees from "../Search/SearchEmployees"
+import authHeader from "../services/auth_header"
 
 function WriteJournals(props) {
 
-    // const [employeeFullName, setEmployeeFullName] = useState("");
-    const [employeeID, setEmployeeID] = useState("");
-    const [newJournalDate, setNewJournalDate] = useState("");
-    const [journalType, setJournalType] = useState("Type");
-    const [info, setInfo] = useState("");
-    const [cardColor, setCardColor] = useState("");
-    const [showInfo, setShowInfo] = useState(false);
-    const [showInfoGiving, setShowInfoGiving] = useState(false);
-    const [employeeIDGiving, setEmployeeIDGiving] = useState("");
-    const [isReady, setIsReady] = useState("false");
-    const [dismiss, setDismiss] = useState("");
+    // const [employeeFullName, setEmployeeFullName] = useState("")
+    const [employeeID, setEmployeeID] = useState("")
+    const [newJournalDate, setNewJournalDate] = useState("")
+    const [journalType, setJournalType] = useState("Type")
+    const [info, setInfo] = useState("")
+    const [cardColor, setCardColor] = useState("")
+    const [showInfo, setShowInfo] = useState(false)
+    const [showInfoGiving, setShowInfoGiving] = useState(false)
+    const [employeeIDGiving, setEmployeeIDGiving] = useState("")
+    const [isReady, setIsReady] = useState("false")
+    const [dismiss, setDismiss] = useState("")
 
     //update if we should submit the journal
     useEffect(()=>{
-        shouldSubmit();
+        shouldSubmit()
     //if any of the states change then run shouldSubmit
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[newJournalDate, journalType, info, employeeID, employeeIDGiving]);
+    },[newJournalDate, journalType, info, employeeID, employeeIDGiving])
 
     function submitJournal(evt) {
 
         //stops page from refreshing after submit
-        evt.preventDefault();
+        evt.preventDefault()
 
         //if nothing is udefined do the submission
         if (!isReady) {
@@ -50,8 +50,14 @@ function WriteJournals(props) {
                 //data we are sending
                 body: JSON.stringify(journal)
                 //if props state is true then we set it to false, and vice versa, this will reload the journals
-            }).then(() => { props.changeState(props.state ? false : true); })
-                .catch(err => console.log(err));
+            }).then((response) => { 
+                props.changeState(props.state ? false : true) 
+                if (response.status === 401 || response.status === 403) {
+                    alert("Requires Admin Account")
+
+                }
+            })
+                .catch(err =>  console.log(err))
         }
 
     }
@@ -59,12 +65,12 @@ function WriteJournals(props) {
     //this will be called inside the button that submits the journal
     function shouldSubmit(){
         if (info === "" || employeeIDGiving === "" || journalType === "Type" || employeeID === "" || newJournalDate === "") {
-            setDismiss("");
-            setIsReady(false);
+            setDismiss("")
+            setIsReady(false)
         }else {
             //when the correct information is entered, it is ready to submit
-            setIsReady(true);
-            setDismiss("modal");
+            setIsReady(true)
+            setDismiss("modal")
         }
     }
 
@@ -95,8 +101,8 @@ function WriteJournals(props) {
                 </div>
             </div>
         </div>
-    );
+    )
 
 }
 
-export default WriteJournals;
+export default WriteJournals

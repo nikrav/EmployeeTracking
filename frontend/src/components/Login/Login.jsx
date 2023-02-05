@@ -1,13 +1,27 @@
-import React, { useState } from "react";
-import AuthService from "../services/auth_service";
+import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import AuthService from "../services/auth_service"
+import NavBar from "../PageLayout/NavBar"
 
-function Login() {
+function Login(props) {
+
+    const navigate = useNavigate()
 
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
 
     function onSubmit(evt) {
+        evt.preventDefault()
         AuthService.login(username, password)
+        //if it is succesful navigate back home
+        .then(()=>{
+            props.setCheckAccount(props.setCheckAccount(props.checkAccount?false:true))
+            navigate("/", { replace: true })
+        })
+        //logs status
+        .catch((err)=>{
+            alert("Username or Password was Incorrect")
+        })
     }
 
     return (
@@ -34,7 +48,7 @@ function Login() {
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default Login;
+export default Login

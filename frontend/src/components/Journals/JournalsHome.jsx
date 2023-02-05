@@ -1,32 +1,32 @@
-import React, { useState, useEffect } from "react";
-import WriteJournals from "./WriteJournals";
+import React, { useState, useEffect } from "react"
+import WriteJournals from "./WriteJournals"
 import PrintJournals from "./PrintJournals"
 
 function Journals(props) {
     //our states to get the journal data
-    const [journals, setJournals] = useState([]);
+    const [journals, setJournals] = useState([])
     //this state will be switched everytime in order to reset the journal flow
     const [stateTracker, setStateTracker] = useState(false)
     //option to show all journals, good journals, bad journals, or infor journals
-    const [show, setShow] = useState("Show");
+    const [show, setShow] = useState("Show")
     //get todays date
-    const today = new Date();
-    //get a week agos date
-    const weekAgo = new Date();
-    weekAgo.setDate(weekAgo.getDate()-7)
+    const today = new Date()
+    //get a year agos date
+    const yearAgo = new Date()
+    yearAgo.setDate(yearAgo.getDate()-365)
     //dates to do journals for, first is the week ago date
-    const [startDate, setStartDate] = useState(weekAgo.toISOString().substring(0,10));
+    const [startDate, setStartDate] = useState(yearAgo.toISOString().substring(0,10))
     //this is todays date
-    const [endDate, setEndDate] = useState(today.toISOString().substring(0,10));
-    const [fromToAPIString, setFromToAPIString] = useState("&from=" + startDate + "&to=" + endDate);
+    const [endDate, setEndDate] = useState(today.toISOString().substring(0,10))
+    const [fromToAPIString, setFromToAPIString] = useState("&from=" + startDate + "&to=" + endDate)
 
-    var findEmployee;
+    var findEmployee
 
     //if props.oneEmployee does not exist then we display all messages else display that employees messages
     if (props.id === undefined) {
-        findEmployee = "";
+        findEmployee = ""
     } else {
-        findEmployee = "&employee_id=" + props.id;
+        findEmployee = "&employee_id=" + props.id
     }
 
     //the information we are getting from the backend
@@ -36,10 +36,10 @@ function Journals(props) {
             //turns data into json
             .then(res => res.json())
             //put the data into the journals state
-            .then(journalData => { setJournals(journalData);; })
+            .then(journalData => { setJournals(journalData) })
             //catches errors
-            .catch(err => console.log(err));
-    }, [findEmployee, stateTracker, show, fromToAPIString]);
+            .catch(err => console.log(err))
+    }, [findEmployee, stateTracker, show, fromToAPIString])
     // [] at the end determines when to make the request, [ ] by itself only makes the request once
 
     //if the new date is empty then keep it the same
@@ -47,18 +47,18 @@ function Journals(props) {
         if(date === ""){
             alert("Please Enter a Valid Date")
         } else {
-            setEndDate(date);
-            setFromToAPIString("&from=" + startDate + "&to=" + date);
+            setEndDate(date)
+            setFromToAPIString("&from=" + startDate + "&to=" + date)
         }
     }
 
     //if the new date is empty then keep it the same
     function shouldResetStart(date){
         if(date === ""){
-            alert("Please DO NOT Use Backspace");
+            alert("Please DO NOT Use Backspace")
         } else {
-            setStartDate(date);
-            setFromToAPIString("&from=" + date + "&to=" + endDate);
+            setStartDate(date)
+            setFromToAPIString("&from=" + date + "&to=" + endDate)
         }
     }
 
@@ -102,9 +102,9 @@ function Journals(props) {
                 {!stateTracker && <WriteJournals changeState={setStateTracker} state={stateTracker} />}
                 {stateTracker && <WriteJournals changeState={setStateTracker} state={stateTracker} />}
             </div>
-            <PrintJournals journalsToPrint={journals} changeState={setStateTracker} state={stateTracker} />
+            <PrintJournals parent={props.parent} journalsToPrint={journals} changeState={setStateTracker} state={stateTracker} />
         </div>
-    );
-};
+    )
+}
 
-export default Journals;
+export default Journals

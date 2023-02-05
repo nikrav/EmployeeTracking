@@ -1,4 +1,4 @@
-import PrintEmployees from "./PrintEmployees";
+import PrintEmployees from "./PrintEmployees"
 
 function Employees() {
 
@@ -7,6 +7,6 @@ function Employees() {
             <PrintEmployees />
         </div>
     )
-};
+}
 
-export default Employees;
+export default Employees

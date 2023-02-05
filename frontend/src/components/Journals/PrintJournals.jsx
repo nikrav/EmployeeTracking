@@ -32,7 +32,8 @@ function PrintJournals(props) {
                                     : _.lowerCase(journal.good_bad_info) === "bad" ? cardColor = "card-header text-bg-danger"
                                         : cardColor = "card-header text-bg-white"}>
                                 <h5 className="ms-0 mb-0 d-inline-block">{_.upperFirst(journal.good_bad_info)}</h5>
-                                <button data-bs-toggle="modal" data-bs-target="#deleteModal" type="button" className="d-inline-block position-absolute end-0 me-4 mb-0 btn-close" aria-label="Close" onClick={() => setJournalToDelete(journal.journal_id)}></button>
+                                {/* cant call a modal in a modal so we cant call it in one emp */}
+                                {props.parent !== "oneEmp" &&<button data-bs-toggle="modal" data-bs-target="#deleteModal" type="button" className="d-inline-block position-absolute end-0 me-4 mb-0 btn-close" aria-label="Close" onClick={() => setJournalToDelete(journal.journal_id)}></button>}
                             </div>
                             <div className="card-body">
                                 <h2 className="text-center">{journal.fName + " " + journal.lName}</h2>

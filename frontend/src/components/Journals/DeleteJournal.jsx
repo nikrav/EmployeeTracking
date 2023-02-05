@@ -1,12 +1,12 @@
-import React from "react";
-import authHeader from "../services/auth_header";
+import React from "react"
+import authHeader from "../services/auth_header"
 
 function DeleteJournal(props) {
 
     function deleteJournal() {
 
         //stops page from refreshing after submit
-        // evt.preventDefault();
+        // evt.preventDefault()
         //object we are going to send/post
         const employee = {
             journal_id: props.journal_id
@@ -17,14 +17,20 @@ function DeleteJournal(props) {
             //type of method we are doing
             method: "DELETE",
             //type of information we are sending
-            
+
             headers: { "Content-Type": "application/json", "x-access-token": authHeader() },
             //data we are sending
             body: JSON.stringify(employee)
         })
             //if props state is true then we set it to false, and vice versa, this will reload the journals
-            .then(() => { props.changeState(props.state ? false : true) })
-            .catch(err => console.log(err));
+            .then((response) => {
+                props.changeState(props.state ? false : true)
+                if (response.status === 401 || response.status === 403) {
+                    alert("Requires Admin Account")
+
+                }
+            })
+            .catch(err => console.log(err))
     }
 
     return (
@@ -42,8 +48,8 @@ function DeleteJournal(props) {
                 </div>
             </div>
         </div>
-    );
+    )
 
-};
+}
 
-export default DeleteJournal;
+export default DeleteJournal

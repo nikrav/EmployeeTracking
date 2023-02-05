@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
-import authHeader from "../services/auth_header";
+import React, { useState, useEffect } from "react"
+import authHeader from "../services/auth_header"
 
 function AddEmployee(props) {
 
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
     //is ready will see if the journal is ready to submit
-    const [isReady, setIsReady] = useState("false");
+    const [isReady, setIsReady] = useState("false")
     //dismiss sets the string that dismisses the modal
-    const [dismiss, setDismiss] = useState("");
+    const [dismiss, setDismiss] = useState("")
 
     //update if we should submit the journal
     useEffect(() => {
-        shouldSubmit();
+        shouldSubmit()
         //if any of the states change then run shouldSubmit
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [firstName, lastName])
@@ -20,7 +20,7 @@ function AddEmployee(props) {
     //handles the submit request by sending a post request
     function handleClick(evt) {
         //stops page from refreshing after submit
-        evt.preventDefault();
+        evt.preventDefault()
 
         if (!isReady) {
             alert("Please Fill Out the Entire Employee Form")
@@ -40,22 +40,26 @@ function AddEmployee(props) {
                 headers: { "Content-Type": "application/json", "x-access-token": authHeader() },
                 //data we are sending
                 body: JSON.stringify(employee)
-            }).then(() => {
-                props.changeState(props.state ? false : true);
-                setFirstName("");
-                setLastName("");
-            })
+            }).then((response) => {
+                props.changeState(props.state ? false : true)
+                setFirstName("")
+                setLastName("")
+                console.log(response)
+                if(response.status === 401 || response.status === 403){
+                    alert("Requires Admin Account")
+                }
+            }).catch((err)=> console.log(err))
         }
     }
 
     function shouldSubmit() {
         if (firstName === "" || lastName === "") {
-            setDismiss("");
-            setIsReady(false);
+            setDismiss("")
+            setIsReady(false)
         } else {
             //when the correct information is entered, it is ready to submit
-            setIsReady(true);
-            setDismiss("modal");
+            setIsReady(true)
+            setDismiss("modal")
         }
     }
 
@@ -81,7 +85,7 @@ function AddEmployee(props) {
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default AddEmployee;
+export default AddEmployee

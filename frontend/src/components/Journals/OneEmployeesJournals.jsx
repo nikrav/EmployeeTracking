@@ -1,11 +1,11 @@
-import React from "react";
-import JournalsHome from "./JournalsHome";
+import React from "react"
+import JournalsHome from "./JournalsHome"
 
 function OneEmployeesJournals(props){
 
     return(
-        <JournalsHome id={props.id}/>
-    );
-};
+        <JournalsHome parent="oneEmp" id={props.id}/>
+    )
+}
 
-export default OneEmployeesJournals;
+export default OneEmployeesJournals

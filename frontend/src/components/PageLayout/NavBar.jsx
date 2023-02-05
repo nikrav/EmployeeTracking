@@ -1,9 +1,15 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
-import authService from "../services/auth_service";
+import React, { useState } from "react"
+import { useEffect } from "react"
+import { Link } from "react-router-dom"
+import authService from "../services/auth_service"
 
-function NavBar() {
+function NavBar(props) {
+
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+    useEffect(()=>{
+        setIsLoggedIn(authService.getCurrentUser()?true:false)
+    },[props.checkAccount])
 
     return (
         <nav id="navbar-for-page" className="fw-bolder border-bottom border-5 opacity-100 border-dark navbar navbar-expand-lg bg-white bg-graident navbar-white">
@@ -24,17 +30,20 @@ function NavBar() {
                     <li className="nav-item px-3">
                         <Link to="/journals" className="nav-link">Journals</Link>
                     </li>
-                    <li className="nav-item px-3">
-                        <Link to="/sign-in" className="nav-link">Sign-In</Link>
-                    </li>
-                    {authService.getCurrentUser() && 
-                    <li>
-                        <button className="nav-item btn btn-primary p-1" onClick={authService.logout}>Sign-Out</button>
-                    </li>}
+                    {!isLoggedIn &&
+
+                        <li className="nav-item px-3">
+                            <Link to="/sign-in" className="nav-link">Sign-In</Link>
+                        </li>}
+
+                    {isLoggedIn &&
+                        <li>
+                            <button className="nav-item btn btn-primary p-1" onClick={()=>{authService.logout(); props.setCheckAccount(props.checkAccount?false:true)}}>Sign-Out</button>
+                        </li>}
                 </ul>
             </div>
         </nav>
-    );
-};
+    )
+}
 
-export default NavBar;
+export default NavBar

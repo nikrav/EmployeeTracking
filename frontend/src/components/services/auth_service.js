@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "axios"
 
 class AuthService {
   login(username, password) {
@@ -9,21 +9,21 @@ class AuthService {
       })
       .then(response => {
         if (response.data.accessToken) {
-          localStorage.setItem("user", JSON.stringify(response.data));
+          localStorage.setItem("user", JSON.stringify(response.data))
         }
 
-        return response.data;
-      });
+        return response.data
+      })
   }
 
   logout() {
-    localStorage.removeItem("user");
+    return localStorage.removeItem("user")
   }
 
   getCurrentUser() {
-    return JSON.parse(localStorage.getItem('user'));;
+    return JSON.parse(localStorage.getItem('user'))
   }
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default new AuthService();
+export default new AuthService()
