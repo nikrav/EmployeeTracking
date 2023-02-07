@@ -31,11 +31,11 @@ function Home() {
                         All employee information is stored in a MySQL Server. There are three simple tables. The first table is the employee table
                         that stores all employees by first name, last name, and ID. The second table is the journals table. It houses the journals and their
                         information. The columns in the journal table are: the ID of employee who is receiving the journal, the ID of employee who is writing the journal,
-                        the date of the journal, the type of journal (good, bad, or info), and the content of the journal.
+                        the date of the journal, the type of journal (good, bad, or info), and the content of the journal. The final table holds the account information.
                     </p>
                     <h5><strong>API: Express</strong></h5>
                     <p>
-                        The API for this project is a Express.js server. It implements data retreival and insertion on the MySQL server.
+                        The API for this project is a Express.js server. It implements data retrieval and insertion on the MySQL server.
                         It allows for backend password hashing and backend account authentication.
                     </p>
                     <h5><strong>Frontend: React</strong></h5>
