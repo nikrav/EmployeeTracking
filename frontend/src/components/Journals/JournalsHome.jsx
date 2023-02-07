@@ -83,7 +83,7 @@ function Journals(props) {
                             </ul>
                         </div>
                         <div className="col-6 d-grid">
-                            <button data-bs-toggle="modal" data-bs-target="#addJournalModal" type="button" className="btn btn-primary">Add Journal</button>
+                        {props.parent !== "oneEmp" &&<button data-bs-toggle="modal" data-bs-target="#addJournalModal" type="button" className="btn btn-primary">Add Journal</button>}
                         </div>
                         <div className="col-6 d-grid">
                             <label>From:</label>
