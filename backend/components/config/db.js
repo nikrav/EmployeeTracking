@@ -4,10 +4,10 @@ require('dotenv').config()
 
 const pool = mysql.createPool({
     connectionLimit: 10,
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_DATABASE
+    host: database-1.c50ee2aam39b.eu-north-1.rds.amazonaws.com,
+    user: root,
+    password: Vkvrrn123,
+    database: emp
 })
 
 module.exports = pool
